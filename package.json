@@ -1,7 +1,7 @@
 {
   "name": "santiportfolio",
   "version": "1.0.0",
-  "description": "Pagina web de Santiago Cano",
+  "description": "Pagina web de Benmadi imad",
   "main": "index.js",
   "scripts": {
     "dev": "next dev -H 0.0.0.0",
@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "keywords": [],
-  "author": "Santiago Cano",
+  "author": "Benmadi imad",
   "license": "MIT",
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
