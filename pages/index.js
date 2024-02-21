@@ -62,17 +62,18 @@ const Page = () => {
             About Me
           </Heading>
           <Paragraph>
-            Hey there! I'm imed eddine, a budding web developer fueled by
+            Hey there! I&apos;m imed eddine, a budding web developer fueled by
             curiosity and a love for coding. Currently studying computer
-            science, I'm on a mission to land my first programming gig.
+            science, I&apos;m on a mission to land my first programming gig.
           </Paragraph>
           <Paragraph>
-            I'm all about diving into new challenges and learning as I go. When
-            I'm not coding, you'll find me buried in books or brainstorming new
-            project ideas.
+            I&apos;m all about diving into new challenges and learning as I go.
+            When I&apos;m not coding, you&apos;ll find me buried in books or
+            brainstorming new project ideas.
           </Paragraph>
           <Paragraph>
-            Let's chat and see how we can create something awesome together!
+            Let&apos;s chat and see how we can create something awesome
+            together!
           </Paragraph>
           <Button
             variant="ghost"

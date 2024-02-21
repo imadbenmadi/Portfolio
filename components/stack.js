@@ -11,11 +11,8 @@ import {
   HTMLIcon,
   CSSIcon,
   JSIcon,
-  TSIcon,
   ReactIcon,
   TailWindIcon,
-  NextIcon,
-  ChakraIcon,
   ViteIcon
 } from '../components/icons/stack/frontIcons'
 import {
@@ -24,17 +21,7 @@ import {
   MongodbIcon,
   JWTIcon
 } from '../components/icons/stack/backIcons'
-import {
-  CIcon,
-  JavaIcon,
-  CloudinaryIcon,
-  GitIcon,
-  GitHubIcon,
-  NotionIcon,
-  NPMIcon,
-  PostmanIcon,
-  VSCodeIcon
-} from '../components/icons/stack/otherIcons'
+
 import { VercelIcon, NetlifyIcon } from '../components/icons/stack/hostingIcons'
 
 const StackSection = () => (
