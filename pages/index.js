@@ -17,7 +17,7 @@ import { IoLogoInstagram, IoLogoGithub, IoLogoLinkedin } from 'react-icons/io5'
 import { MdEmail } from 'react-icons/md'
 import StackSection from '../components/stack'
 import Image from 'next/image'
-import ContactForm from '../components/contact'
+
 
 const Page = () => {
   return (
