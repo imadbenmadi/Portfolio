@@ -25,7 +25,7 @@ import {
 import {
   VercelIcon,
   NetlifyIcon,
-  DzSecurityIcon
+  // DzSecurityIcon
 } from '../components/icons/stack/hostingIcons'
 
 const StackSection = () => (
@@ -166,11 +166,11 @@ const StackSection = () => (
             <NetlifyIcon boxSize={8} />
           </span>
         </Tooltip>
-        <Tooltip label="Netlify">
+        {/* <Tooltip label="Netlify">
           <span>
             <DzSecurityIcon boxSize={8} />
           </span>
-        </Tooltip>
+        </Tooltip> */}
       </Stack>
     </Box>
     {/* <Box
