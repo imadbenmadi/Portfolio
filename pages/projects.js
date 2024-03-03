@@ -34,8 +34,8 @@ const projects = () => (
         Projects
       </Heading>
 
-      <SimpleGrid columns={[1, 1,1]} gap={6}>
-        <Section>
+      <SimpleGrid columns={[1, 1, 1]} gap={6}>
+        {/* <Section>
           <WorkGridItem
             id="roamrental"
             title="Roam Rental"
@@ -157,18 +157,18 @@ const projects = () => (
           >
             Sitio web para dibujar con varias opciones
           </WorkGridItem>
-        </Section>
+        </Section> */}
       </SimpleGrid>
 
       <Box textAlign="center" my={2} mb={4}>
         <Button
           as={NextLink}
-          href="https://github.com/LaVieja1"
+          href="https://github.com/imadbenmadi"
           scroll={false}
           rightIcon={<IoLogoGithub />}
           colorScheme={useColorModeValue('blue', 'red')}
         >
-          Más proyectos
+          View more on GitHub
         </Button>
       </Box>
     </Container>

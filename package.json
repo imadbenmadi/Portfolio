@@ -1,5 +1,5 @@
 {
-  "name": "santiportfolio",
+  "name": "@imadb/portfolio",
   "version": "1.0.0",
   "description": "Pagina web de Benmadi imad",
   "main": "index.js",
