@@ -22,7 +22,11 @@ import {
   JWTIcon
 } from '../components/icons/stack/backIcons'
 
-import { VercelIcon, NetlifyIcon } from '../components/icons/stack/hostingIcons'
+import {
+  VercelIcon,
+  NetlifyIcon,
+  DzSecurityIcon
+} from '../components/icons/stack/hostingIcons'
 
 const StackSection = () => (
   <Section delay={0.2}>
@@ -160,6 +164,11 @@ const StackSection = () => (
         <Tooltip label="Netlify">
           <span>
             <NetlifyIcon boxSize={8} />
+          </span>
+        </Tooltip>
+        <Tooltip label="Netlify">
+          <span>
+            <DzSecurityIcon boxSize={8} />
           </span>
         </Tooltip>
       </Stack>
