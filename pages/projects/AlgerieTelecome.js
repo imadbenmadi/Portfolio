@@ -8,7 +8,7 @@ const Project = () => (
   <Layout title="AlgerieTelecome">
     <Container my={6}>
       <Title>
-        the Algerian Online Store <Badge>2023</Badge>
+        Algerie Telecome <Badge>2023</Badge>
       </Title>
       <Paragraph>
         We participated in a hackathon organized by Phoenix_esgee club, during

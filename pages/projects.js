@@ -19,6 +19,8 @@ import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png
 import thumbSkate from '../public/images/projects/Skate2.png'
 import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
 import thumbXO from '../public/images/projects/XO.png'
+import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
+import thumbPrayingTimes from '../public/images/projects/PrayingTimes.png'
 const projects = () => (
   <Layout title="Proyectos">
     <Container>
@@ -66,18 +68,18 @@ const projects = () => (
           <WorkGridItem
             id="RockPaperSeasor"
             title="Rock Paper Seasor"
-            thumbnail={thumbAlgerieTelecome}
+            thumbnail={thumbRockPaperSeasor}
           >
             Simple Rock Paper Seasor Game
           </WorkGridItem>
         </Section>
-        <Section delay={0.6}>
+        <Section delay={0.5}>
           <WorkGridItem
-            id="AlgerieTelecome"
-            title="Algerie Telecome"
-            thumbnail={thumbAlgerieTelecome}
+            id="PrayingTimes"
+            title="Praying Times App"
+            thumbnail={thumbPrayingTimes}
           >
-            مشروع تحسين خدمة الزبائن
+            Praying Times Web Application
           </WorkGridItem>
         </Section>
       </SimpleGrid>
@@ -90,7 +92,7 @@ const projects = () => (
           rightIcon={<IoLogoGithub />}
           colorScheme={useColorModeValue('blue', 'red')}
         >
-          View All on GitHub
+          View All in GitHub
         </Button>
       </Box>
     </Container>

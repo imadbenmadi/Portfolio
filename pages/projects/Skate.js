@@ -8,7 +8,7 @@ const Project = () => (
   <Layout title="Skate">
     <Container my={6}>
       <Title>
-        the Algerian Online Store <Badge>2024</Badge>
+        Skate<Badge>2024</Badge>
       </Title>
       <Paragraph>
         I built the website while working as a web developer at Skate Company.

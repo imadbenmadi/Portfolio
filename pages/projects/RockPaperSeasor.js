@@ -5,10 +5,10 @@ import Paragraph from '../../components/paragraph'
 import Layout from '../../components/layouts/article'
 
 const Project = () => (
-  <Layout title="AOS">
+  <Layout title="RockPaperSeasor">
     <Container my={6}>
       <Title>
-        the Algerian Online Store <Badge>2024</Badge>
+        Rock Paper Seassor <Badge>2023</Badge>
       </Title>
       <Paragraph>
         I developed this simple Rock Paper Seasor game while I was learning web
