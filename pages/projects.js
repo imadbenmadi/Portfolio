@@ -26,16 +26,18 @@ import thumbTaskTrack from '../public/images/projects/thumbnail_tasktrack.webp'
 import thumbRoamRental from '../public/images/projects/thumbnail_roamrental.webp'
 import thumbMiniLinkio from '../public/images/projects/thumbnail_minilinkio.webp'
 import thumbFormatFlow from '../public/images/projects/thumbnail_formatflow.webp'
-
+import AOS from '../public/images/projects/My/AOS.png'
 const projects = () => (
   <Layout title="Proyectos">
     <Container>
       <Heading as="h3" fontSize={20} my={4}>
         Projects
       </Heading>
-
-      <SimpleGrid columns={[1, 1, 1]} gap={6}>
-        {/* <Section>
+      <WorkGridItem id="AOS" title="AOS" thumbnail={AOS}>
+        the Algeria Online Store
+      </WorkGridItem>
+      {/* <SimpleGrid columns={[1, 1, 1]} gap={6}>
+        <Section>
           <WorkGridItem
             id="roamrental"
             title="Roam Rental"
@@ -157,8 +159,8 @@ const projects = () => (
           >
             Sitio web para dibujar con varias opciones
           </WorkGridItem>
-        </Section> */}
-      </SimpleGrid>
+        </Section>
+      </SimpleGrid> */}
 
       <Box textAlign="center" my={2} mb={4}>
         <Button
@@ -168,7 +170,7 @@ const projects = () => (
           rightIcon={<IoLogoGithub />}
           colorScheme={useColorModeValue('blue', 'red')}
         >
-          View more on GitHub
+          View All on GitHub
         </Button>
       </Box>
     </Container>

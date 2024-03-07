@@ -9,17 +9,16 @@ const Main = ({ children, router }) => {
     <Box as="main" pb={8}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Santi Portfolio" />
-        <meta name="author" content="Benmadi imad" />
-        <meta name="author" content="LaVieja1" />
-        <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <link
+        <meta name="description" content="Benmadi imed eddine Portfolio" />
+        <meta name="author" content="Benmadi imed eddine" />
+        {/* <link rel="apple-touch-icon" href="apple-touch-icon.png" /> */}
+        {/* <link
           rel="icon"
           type="image/png"
           sizes="192x192"
           href="/android-chrome-192x192.png"
-        ></link>
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        ></link> */}
+        {/* <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /> */}
         <meta property="og:site_name" content="Benmadi imad" />
         <meta name="og:title" content="Benmadi imad" />
         <meta property="og:type" content="website" />
