@@ -166,11 +166,9 @@ const StackSection = () => (
             <NetlifyIcon boxSize={8} />
           </span>
         </Tooltip>
-        {/* <Tooltip label="Netlify">
-          <span>
-            <DzSecurityIcon boxSize={8} />
-          </span>
-        </Tooltip> */}
+        <Tooltip label="DzSecurity">
+          <img src="/DZSecurity.png" style={{width:"100px"}} />
+        </Tooltip>
       </Stack>
     </Box>
     {/* <Box
