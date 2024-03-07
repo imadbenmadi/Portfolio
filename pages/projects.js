@@ -21,6 +21,7 @@ import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
 import thumbXO from '../public/images/projects/XO.png'
 import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
 import thumbPrayingTimes from '../public/images/projects/PrayingTimes.png'
+import thumbPortfolio_old from '../public/images/projects/Portfolio_old.png'
 const projects = () => (
   <Layout title="Proyectos">
     <Container>
@@ -78,9 +79,14 @@ const projects = () => (
             id="PrayingTimes"
             title="Praying Times App"
             thumbnail={thumbPrayingTimes}
-          >
-            Praying Times Web Application
-          </WorkGridItem>
+          ></WorkGridItem>
+        </Section>
+        <Section delay={0.5}>
+          <WorkGridItem
+            id="Portfolio_old"
+            title="Old Version Of my protfolio"
+            thumbnail={thumbPortfolio_old}
+          ></WorkGridItem>
         </Section>
       </SimpleGrid>
 
