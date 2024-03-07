@@ -12,8 +12,8 @@ import {
 const NotFound = () => {
   return (
     <Container>
-      <Heading as="h1">No encontrado</Heading>
-      <Text>La página que estas buscando no fue encontrada.</Text>
+      <Heading as="h1">Not Found</Heading>
+      <Text>The page you are looking for was not found.</Text>
       <Divider my={6} />
       <Box my={6} textAlign="center">
         <Button
@@ -21,7 +21,7 @@ const NotFound = () => {
           href="/"
           colorScheme={useColorModeValue('blue', 'red')}
         >
-          Volver al inicio
+          Back to Home
         </Button>
       </Box>
     </Container>

@@ -1,14 +1,14 @@
 import { Container, Badge, Link, List, ListItem } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { Title, WorkImage, Meta } from '../../../components/project'
-import Paragraph from '../../../components/paragraph'
-import Layout from '../../../components/layouts/article'
+import { Title, WorkImage, Meta } from '../../components/project'
+import Paragraph from '../../components/paragraph'
+import Layout from '../../components/layouts/article'
 
 const Project = () => (
   <Layout title="AOS">
     <Container my={6}>
       <Title>
-        the Algerian Online Store <Badge>2023</Badge>
+        the Algerian Online Store <Badge>2024</Badge>
       </Title>
       <Paragraph>
         An Algerian e-commerce platform that brings together sellers (store
@@ -34,13 +34,13 @@ const Project = () => (
           </Link>
         </ListItem>
         <ListItem>
-          <Meta>Stack</Meta>
-          <span>NodeJS, MongoDB</span>
+          <Meta>Coded by :</Meta>
+          <span>ExpressJs, JWT Authenthication, MongoDB</span>
         </ListItem>
       </List>
 
-      <WorkImage src="/images/projects/My/AOS2.png" alt="AOS" />
-      <WorkImage src="/images/projects/My/AOS.png" alt="AOS" />
+      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
+      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
     </Container>
   </Layout>
 )

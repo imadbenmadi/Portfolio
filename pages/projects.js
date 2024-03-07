@@ -14,108 +14,32 @@ import Section from '../components/section'
 import { WorkGridItem } from '../components/grid-item'
 import { IoLogoGithub } from 'react-icons/io5'
 
-import thumbWilly from '../public/images/projects/thumbnail_willy.png'
-import thumbWeText from '../public/images/projects/thumbnail_wetext.png'
-import thumbOdinBook from '../public/images/projects/thumbnail_odinbook.png'
-import thumbShopCart from '../public/images/projects/thumbnail_shopcart.png'
-import thumbCreadorCV from '../public/images/projects/thumbnail_creadorcv.png'
-import thumbSuperheroMemory from '../public/images/projects/thumbnail_superheromemory.png'
-import thumbBattleship from '../public/images/projects/thumbnail_battleship.png'
-import thumbEtchASketch from '../public/images/projects/thumbnail_etch-a-sketch.png'
-import thumbTaskTrack from '../public/images/projects/thumbnail_tasktrack.webp'
-import thumbRoamRental from '../public/images/projects/thumbnail_roamrental.webp'
-import thumbMiniLinkio from '../public/images/projects/thumbnail_minilinkio.webp'
-import thumbFormatFlow from '../public/images/projects/thumbnail_formatflow.webp'
-import AOS from '../public/images/projects/My/AOS.png'
+
+
+import thumbAOS from '../public/images/projects/AOS.png'
+import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
 const projects = () => (
   <Layout title="Proyectos">
     <Container>
       <Heading as="h3" fontSize={20} my={4}>
         Projects
       </Heading>
-      <WorkGridItem id="AOS" title="AOS" thumbnail={AOS}>
-        the Algeria Online Store
-      </WorkGridItem>
-      {/* <SimpleGrid columns={[1, 1, 1]} gap={6}>
-        <Section>
-          <WorkGridItem
-            id="roamrental"
-            title="Roam Rental"
-            thumbnail={thumbRoamRental}
-          >
-            Aplicación web de alquiler de propiedades estilo Airbnb
-          </WorkGridItem>
-        </Section>
 
-        <Section>
-          <WorkGridItem
-            id="tasktrack"
-            title="Task-Track"
-            thumbnail={thumbTaskTrack}
-          >
-            Proyecto FullStack imitando a la página Trello.
-          </WorkGridItem>
-        </Section>
-
-        <Section>
-          <WorkGridItem
-            id="whereswally"
-            title="Where's Wally"
-            thumbnail={thumbWilly}
-          >
-            Inspirado en el juego Where&apos;s Wally, con sistema de puntuación.
-          </WorkGridItem>
-        </Section>
-
-        <Section>
-          <WorkGridItem id="wetext" title="WeText" thumbnail={thumbWeText}>
-            Una app web de mensaje de texto
-          </WorkGridItem>
-        </Section>
-
-        <Section>
-          <WorkGridItem
-            id="formatflow"
-            title="FormatFlow"
-            thumbnail={thumbFormatFlow}
-          >
-            FormatFlow es una aplicación para tomar notas sencillas usando
-            Markdown
-          </WorkGridItem>
-        </Section>
-
-        <Section delay={0.1}>
-          <WorkGridItem
-            id="odinbook"
-            title="OdinBook"
-            thumbnail={thumbOdinBook}
-          >
-            Red social imitación de Facebook
-          </WorkGridItem>
-        </Section>
-
-        <Section>
-          <WorkGridItem
-            id="minilinkio"
-            title="MiniLinkio"
-            thumbnail={thumbMiniLinkio}
-          >
-            Recortador de links
-          </WorkGridItem>
-        </Section>
-
-        <Section delay={0.1}>
-          <WorkGridItem
-            id="shopcart"
-            title="Shop Cart"
-            thumbnail={thumbShopCart}
-          >
-            Sitio web de compra de ropa usando una API
-          </WorkGridItem>
-        </Section>
+      <SimpleGrid columns={[1, 1, 1]} gap={6}>
+        <WorkGridItem id="Skate" title="Skate" thumbnail={thumbAOS}>
+          Skate Company
+        </WorkGridItem>
+        <WorkGridItem id="AOS" title="AOS" thumbnail={thumbAOS}>
+          the Algeria Online Store
+        </WorkGridItem>
+        <WorkGridItem
+          id="AlgerieTelecome"
+          title="مشروع تحسين خدمة الزبائن"
+          thumbnail={thumbAlgerieTelecome}
+        ></WorkGridItem>
       </SimpleGrid>
 
-      <Section delay={0.4}>
+      {/* <Section delay={0.4}>
         <Divider my={6} />
 
         <Heading as="h3" fontSize={20} mb={4}>
