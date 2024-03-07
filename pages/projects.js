@@ -64,11 +64,11 @@ const projects = () => (
         </Section>
         <Section delay={0.5}>
           <WorkGridItem
-            id="AlgerieTelecome"
-            title="Algerie Telecome"
+            id="RockPaperSeasor"
+            title="Rock Paper Seasor"
             thumbnail={thumbAlgerieTelecome}
           >
-            مشروع تحسين خدمة الزبائن
+            Simple Rock Paper Seasor Game
           </WorkGridItem>
         </Section>
         <Section delay={0.6}>
