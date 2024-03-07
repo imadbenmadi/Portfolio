@@ -32,8 +32,9 @@ const Project = () => (
         </ListItem>
       </List>
 
-      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
-      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
+      <WorkImage src="/images/projects/Skate.png" alt="Skate" />
+      <WorkImage src="/images/projects/Skate2.png" alt="Skate" />
+      <WorkImage src="/images/projects/Skate3.png" alt="Skate" />
     </Container>
   </Layout>
 )

@@ -14,10 +14,10 @@ import Section from '../components/section'
 import { WorkGridItem } from '../components/grid-item'
 import { IoLogoGithub } from 'react-icons/io5'
 
-
-
 import thumbAOS from '../public/images/projects/AOS.png'
 import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
+import thumbSkate from '../public/images/projects/Skate2.png'
+import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
 const projects = () => (
   <Layout title="Proyectos">
     <Container>
@@ -26,65 +26,64 @@ const projects = () => (
       </Heading>
 
       <SimpleGrid columns={[1, 1, 1]} gap={6}>
-        <WorkGridItem id="Skate" title="Skate" thumbnail={thumbAOS}>
+        <WorkGridItem id="Skate" title="Skate" thumbnail={thumbSkate}>
           Skate Company
         </WorkGridItem>
         <WorkGridItem id="AOS" title="AOS" thumbnail={thumbAOS}>
           the Algeria Online Store
         </WorkGridItem>
+        {/* <WorkGridItem
+          id="InfoSolutions"
+          title="InfoSolutions"
+          thumbnail={thumbInfosolutions}
+        >
+          Logiciel de Solutions pour les Modules Informatiques
+        </WorkGridItem> */}
         <WorkGridItem
           id="AlgerieTelecome"
-          title="مشروع تحسين خدمة الزبائن"
+          title="Algerie Telecome"
           thumbnail={thumbAlgerieTelecome}
-        ></WorkGridItem>
+        >
+          مشروع تحسين خدمة الزبائن
+        </WorkGridItem>
       </SimpleGrid>
-
-      {/* <Section delay={0.4}>
+      <Section delay={0.4}>
         <Divider my={6} />
 
         <Heading as="h3" fontSize={20} mb={4}>
-          Proyectos antiguos
+          Old projects
         </Heading>
       </Section>
 
       <SimpleGrid columns={[1, 1, 2]} gap={6}>
         <Section delay={0.5}>
           <WorkGridItem
-            id="creadorcv"
-            title="Creador CV"
-            thumbnail={thumbCreadorCV}
+            id="AlgerieTelecome"
+            title="Algerie Telecome"
+            thumbnail={thumbAlgerieTelecome}
           >
-            Un creador de CV con opción de imprimir
+            مشروع تحسين خدمة الزبائن
           </WorkGridItem>
         </Section>
         <Section delay={0.5}>
           <WorkGridItem
-            id="superheromemory"
-            title="Superhero Memory"
-            thumbnail={thumbSuperheroMemory}
+            id="AlgerieTelecome"
+            title="Algerie Telecome"
+            thumbnail={thumbAlgerieTelecome}
           >
-            Juego de memoria usando una API de superheroes
+            مشروع تحسين خدمة الزبائن
           </WorkGridItem>
         </Section>
         <Section delay={0.6}>
           <WorkGridItem
-            id="battleship"
-            title="Battleship"
-            thumbnail={thumbBattleship}
+            id="AlgerieTelecome"
+            title="Algerie Telecome"
+            thumbnail={thumbAlgerieTelecome}
           >
-            Juego de batalla naval
+            مشروع تحسين خدمة الزبائن
           </WorkGridItem>
         </Section>
-        <Section delay={0.6}>
-          <WorkGridItem
-            id="etch-a-sketch"
-            title="Etch-A-Sketch"
-            thumbnail={thumbEtchASketch}
-          >
-            Sitio web para dibujar con varias opciones
-          </WorkGridItem>
-        </Section>
-      </SimpleGrid> */}
+      </SimpleGrid>
 
       <Box textAlign="center" my={2} mb={4}>
         <Button

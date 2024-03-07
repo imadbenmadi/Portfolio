@@ -30,13 +30,13 @@ const Project = () => (
         the course of eight hours.
       </Paragraph>
       <List ml={4} my={4}>
-        <ListItem>
+        {/* <ListItem>
           <Meta>Live Stream :</Meta>
           <Link href="https://hakathon-gamma.vercel.app/">
             link
             <ExternalLinkIcon mx="2px" />
           </Link>
-        </ListItem>
+        </ListItem> */}
         <ListItem>
           <Meta>Github Repo : </Meta>
           <Link href="https://github.com/imadbenmadi/Hakathon-">

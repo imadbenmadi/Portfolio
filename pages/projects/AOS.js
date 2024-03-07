@@ -35,12 +35,12 @@ const Project = () => (
         </ListItem>
         <ListItem>
           <Meta>Coded by :</Meta>
-          <span>ExpressJs, JWT Authenthication, MongoDB</span>
+          <span>ExpressJs , JWT Authenthication, MongoDB</span>
         </ListItem>
       </List>
 
       <WorkImage src="/images/projects/AOS.png" alt="AOS" />
-      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
+      <WorkImage src="/images/projects/AOS2.png" alt="AOS" />
     </Container>
   </Layout>
 )
