@@ -18,6 +18,7 @@ import thumbAOS from '../public/images/projects/AOS.png'
 import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
 import thumbSkate from '../public/images/projects/Skate2.png'
 import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
+import thumbXO from '../public/images/projects/XO.png'
 const projects = () => (
   <Layout title="Proyectos">
     <Container>
@@ -57,12 +58,8 @@ const projects = () => (
 
       <SimpleGrid columns={[1, 1, 2]} gap={6}>
         <Section delay={0.5}>
-          <WorkGridItem
-            id="AlgerieTelecome"
-            title="Algerie Telecome"
-            thumbnail={thumbAlgerieTelecome}
-          >
-            مشروع تحسين خدمة الزبائن
+          <WorkGridItem id="XO" title="XO" thumbnail={thumbXO}>
+            Simple XO Game
           </WorkGridItem>
         </Section>
         <Section delay={0.5}>

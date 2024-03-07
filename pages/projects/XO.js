@@ -11,36 +11,34 @@ const Project = () => (
         the Algerian Online Store <Badge>2024</Badge>
       </Title>
       <Paragraph>
-        An Algerian e-commerce platform that brings together sellers (store
-        owners) and buyers, specializing in ease of use, cash transactions, and
-        transportation. The project utilizes enhanced learning algorithms to
-        display suggested products according to user preferences. I was the
-        back-end developer for this project. We delved deep into real complex
-        problems and solved them. I built it with my friend Salah.
+        I developed this simple XO game while I was learning web development.
+        Using HTML, pure CSS, and vanilla JavaScript, I built it entirely from
+        scratch as part of my learning journey. The game provides a fun and
+        interactive way to practice essential web development skills and
+        concepts.
       </Paragraph>
       <List ml={4} my={4}>
         <ListItem>
           <Meta>Live Stream :</Meta>
-          <Link href="https://l3-front-end-ei2b.vercel.app/" target="_black">
+          <Link href="https://xo-sepia.vercel.app/" target="_black">
             link
             <ExternalLinkIcon mx="2px" />
           </Link>
         </ListItem>
         <ListItem>
-          <Meta>Backend Github Repo : </Meta>
-          <Link href="https://github.com/imadbenmadi/AOS" target="_black">
-            https://github.com/imadbenmadi/AOS
+          <Meta>Github Repo : </Meta>
+          <Link href="https://github.com/imadbenmadi/XO" target="_black">
+            https://github.com/imadbenmadi/XO
             <ExternalLinkIcon mx="2px" />
           </Link>
         </ListItem>
         <ListItem>
           <Meta>Coded by :</Meta>
-          <span>ExpressJs , JWT Authenthication, MongoDB</span>
+          <span>HTML , CSS, JavaScript</span>
         </ListItem>
       </List>
 
-      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
-      <WorkImage src="/images/projects/AOS2.png" alt="AOS" />
+      <WorkImage src="/images/projects/XO.png" alt="XO" />
     </Container>
   </Layout>
 )

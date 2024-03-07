@@ -11,10 +11,11 @@ const Project = () => (
         the Algerian Online Store <Badge>2023</Badge>
       </Title>
       <Paragraph>
-        We participated in a hackathon organized by Phoenix_esgee club, during which the
-        challenge was to propose a solution for the company Algerie Telecom. Our
-        team suggested a platform designed to streamline client interactions,
-        aiming to save their time and enhance the company-client relationship.
+        We participated in a hackathon organized by Phoenix_esgee club, during
+        which the challenge was to propose a solution for the company Algerie
+        Telecom. Our team suggested a platform designed to streamline client
+        interactions, aiming to save their time and enhance the company-client
+        relationship.
       </Paragraph>
       <Paragraph>
         The platform features a tickets section where users can track their
@@ -32,14 +33,14 @@ const Project = () => (
       <List ml={4} my={4}>
         {/* <ListItem>
           <Meta>Live Stream :</Meta>
-          <Link href="https://hakathon-gamma.vercel.app/">
+          <Link href="https://hakathon-gamma.vercel.app/" target='_black'>
             link
             <ExternalLinkIcon mx="2px" />
           </Link>
         </ListItem> */}
         <ListItem>
           <Meta>Github Repo : </Meta>
-          <Link href="https://github.com/imadbenmadi/Hakathon-">
+          <Link href="https://github.com/imadbenmadi/Hakathon-" target="_black">
             https://github.com/imadbenmadi/Hakathon-
             <ExternalLinkIcon mx="2px" />
           </Link>

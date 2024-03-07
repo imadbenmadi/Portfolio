@@ -21,7 +21,7 @@ const Project = () => (
       <List ml={4} my={4}>
         <ListItem>
           <Meta>Live Stream :</Meta>
-          <Link href="https://www.skate-consult.com/">
+          <Link href="https://www.skate-consult.com/" target="_black">
             https://www.skate-consult.com/
             <ExternalLinkIcon mx="2px" />
           </Link>

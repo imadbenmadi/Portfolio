@@ -20,14 +20,17 @@ const Project = () => (
       <List ml={4} my={4}>
         <ListItem>
           <Meta>Live Stream :</Meta>
-          <Link href="https://info-solutions.vercel.app/">
+          <Link href="https://info-solutions.vercel.app/" target="_black">
             link
             <ExternalLinkIcon mx="2px" />
           </Link>
         </ListItem>
         <ListItem>
           <Meta>Github Repo : </Meta>
-          <Link href="https://github.com/imadbenmadi/InfoSolutions">
+          <Link
+            href="https://github.com/imadbenmadi/InfoSolutions"
+            target="_black"
+          >
             https://github.com/imadbenmadi/InfoSolutions
             <ExternalLinkIcon mx="2px" />
           </Link>
