@@ -76,6 +76,10 @@ const StackSection = () => (
             <ReactIcon boxSize={8} />
           </span>
         </Tooltip>
+
+        <Tooltip label="React Router">
+          <img src="/react-router.png" style={{ width: '50px' }} />
+        </Tooltip>
         <Tooltip label="Tailwind CSS">
           <span>
             <TailWindIcon boxSize={8} />

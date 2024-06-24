@@ -38,7 +38,10 @@ const Project = () => (
         </ListItem>
         <ListItem>
           <Meta>Coded by :</Meta>
-          <span>Reactjs, ExpressJs, JWT Authenthication, MongoDB</span>
+          <span>
+            Reactjs, TaillwinddCss, ReactRouter, ExpressJs, JWT Authenthication,
+            MongoDB
+          </span>
         </ListItem>
       </List>
 

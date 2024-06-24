@@ -36,13 +36,13 @@ const projects = () => (
         <WorkGridItem id="AOS" title="Algerify" thumbnail={thumbAOS}>
           Algerify
         </WorkGridItem>
-        {/* <WorkGridItem
+        <WorkGridItem
           id="InfoSolutions"
           title="InfoSolutions"
           thumbnail={thumbInfosolutions}
         >
-          Logiciel de Solutions pour les Modules Informatiques
-        </WorkGridItem> */}
+          Info-Solutions
+        </WorkGridItem>
         <WorkGridItem
           id="AlgerieTelecome"
           title="Algerie Telecome"

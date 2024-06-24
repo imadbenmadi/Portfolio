@@ -20,7 +20,7 @@ const Project = () => (
       <List ml={4} my={4}>
         <ListItem>
           <Meta>Live Stream :</Meta>
-          <Link href="https://info-solutions.vercel.app/" target="_black">
+          <Link href="https://info-solutions.cntic-club.com/" target="_black">
             link
             <ExternalLinkIcon mx="2px" />
           </Link>
@@ -37,11 +37,19 @@ const Project = () => (
         </ListItem>
         <ListItem>
           <Meta>Coded by :</Meta>
-          <span>Reactjs</span>
+          <span>Reactjs, TailwindCss, ReactRouter</span>
         </ListItem>
       </List>
 
       <WorkImage src="/images/projects/Infosolutions.png" alt="Infosolutions" />
+      <WorkImage
+        src="/images/projects/Infosolutions2.png"
+        alt="Infosolutions"
+      />
+      <WorkImage
+        src="/images/projects/Infosolutions3.png"
+        alt="Infosolutions"
+      />
     </Container>
   </Layout>
 )

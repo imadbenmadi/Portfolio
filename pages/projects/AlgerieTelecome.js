@@ -47,7 +47,7 @@ const Project = () => (
         </ListItem>
         <ListItem>
           <Meta>Coded by :</Meta>
-          <span>Reactjs , Django , SqlLite</span>
+          <span>Reactjs, ReactRouter, TaillwinddCss , Django , SqlLite</span>
         </ListItem>
       </List>
 
