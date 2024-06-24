@@ -31,10 +31,10 @@ const projects = () => (
 
       <SimpleGrid columns={[1, 1, 1]} gap={6}>
         <WorkGridItem id="Skate" title="Skate" thumbnail={thumbSkate}>
-          Skate Company
+          Skate Platform
         </WorkGridItem>
-        <WorkGridItem id="AOS" title="AOS" thumbnail={thumbAOS}>
-          the Algeria Online Store
+        <WorkGridItem id="AOS" title="Algerify" thumbnail={thumbAOS}>
+          Algerify
         </WorkGridItem>
         {/* <WorkGridItem
           id="InfoSolutions"
@@ -48,7 +48,7 @@ const projects = () => (
           title="Algerie Telecome"
           thumbnail={thumbAlgerieTelecome}
         >
-          مشروع تحسين خدمة الزبائن
+          Customer Service Improvement Project
         </WorkGridItem>
       </SimpleGrid>
       <Section delay={0.4}>

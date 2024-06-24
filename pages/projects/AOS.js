@@ -5,23 +5,25 @@ import Paragraph from '../../components/paragraph'
 import Layout from '../../components/layouts/article'
 
 const Project = () => (
-  <Layout title="AOS">
+  <Layout title="Algerify">
     <Container my={6}>
       <Title>
-        the Algerian Online Store <Badge>2024</Badge>
+        Algerify<Badge>2024</Badge>
       </Title>
       <Paragraph>
-        An Algerian e-commerce platform that brings together sellers (store
-        owners) and buyers, specializing in ease of use, cash transactions, and
-        transportation. The project utilizes enhanced learning algorithms to
-        display suggested products according to user preferences. I was the
-        back-end developer for this project. We delved deep into real complex
-        problems and solved them. I built it with my friend Salah.
+        Algerify is our thesis project, where we built an e-commerce website to
+        apply all the concepts we learned during our three years of
+        undergraduate studies. This project was a collaboration with my two
+        colleagues. We used React and Tailwind CSS for the frontend, with my
+        colleague Salah responsible for the frontend development. I developed
+        the backend of the platform using Node.js and Express.js to create
+        comprehensive, fast, and clean APIs to ensure HTTPS connections on the
+        platform. We used MongoDB as the database.
       </Paragraph>
       <List ml={4} my={4}>
         <ListItem>
           <Meta>Live Stream :</Meta>
-          <Link href="https://l3-front-end-ei2b.vercel.app/" target="_black">
+          <Link href="https://algerify.skate.dz/" target="_black">
             link
             <ExternalLinkIcon mx="2px" />
           </Link>
@@ -39,8 +41,8 @@ const Project = () => (
         </ListItem>
       </List>
 
-      <WorkImage src="/images/projects/AOS.png" alt="AOS" />
-      <WorkImage src="/images/projects/AOS2.png" alt="AOS" />
+      <WorkImage src="/images/projects/AOS.png" alt="Algerify" />
+      <WorkImage src="/images/projects/AOS2.png" alt="Algerify" />
     </Container>
   </Layout>
 )

@@ -5,7 +5,7 @@ import Paragraph from '../../components/paragraph'
 import Layout from '../../components/layouts/article'
 
 const Project = () => (
-  <Layout title="AOS">
+  <Layout title="Algerify">
     <Container my={6}>
       <Title>
         Info Solutions <Badge>2024</Badge>
