@@ -24,7 +24,7 @@ import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
 import thumbPrayingTimes from '../public/images/projects/PrayingTimes.png'
 import thumbPortfolio_old from '../public/images/projects/Portfolio_old.png'
 const projects = () => (
-  <Layout title="Proyectos">
+  <Layout title="Portfolio">
     <Container>
       <Heading as="h3" fontSize={20} my={4}>
         Projects
