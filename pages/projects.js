@@ -17,6 +17,7 @@ import { IoLogoGithub } from 'react-icons/io5'
 import thumbAOS from '../public/images/projects/AOS.png'
 import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
 import thumbSkate from '../public/images/projects/Skate2.png'
+import thumbDzdicom from '../public/images/projects/Dzidcom/1.png'
 import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
 import thumbXO from '../public/images/projects/XO.png'
 import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
@@ -30,6 +31,9 @@ const projects = () => (
       </Heading>
 
       <SimpleGrid columns={[1, 1, 1]} gap={6}>
+        <WorkGridItem id="Dzidcom" title="Dzidcom" thumbnail={thumbDzdicom}>
+          Dzidcom Platform
+        </WorkGridItem>
         <WorkGridItem id="Skate" title="Skate" thumbnail={thumbSkate}>
           Skate Platform
         </WorkGridItem>
