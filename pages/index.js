@@ -62,15 +62,16 @@ const Page = () => {
             About Me
           </Heading>
           <Paragraph>
-            Hey there! I&apos;m imed eddine, a budding web developer fueled by
-            curiosity and a love for coding. Currently studying computer
-            science, I&apos;m on a mission to land my first programming gig.
+            Hey there! I&apos;m Benmadi Imed-Eddine, a dedicated computer
+            science graduate with plans to specialize in data science for my
+            master&apos;s degree. I work as a full-stack web developer, leveraging
+            technologies such as Express.js, Node.js, MySQL, Sequelize, MongoDb,
+            Mongoose, and React.js and TaillwindCss to build robust web
+            applications for startups, small, and large companies. I&apos;m always
+            open to learning and discovering new things, and I enjoy facing new
+            challenges and finding innovative ways to solve them.
           </Paragraph>
-          <Paragraph>
-            I&apos;m all about diving into new challenges and learning as I go.
-            When I&apos;m not coding, you&apos;ll find me buried in books or
-            brainstorming new project ideas.
-          </Paragraph>
+          
           <Paragraph>
             Let&apos;s chat and see how we can create something awesome
             together!

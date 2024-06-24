@@ -24,7 +24,7 @@ import {
 
 import {
   VercelIcon,
-  NetlifyIcon,
+  NetlifyIcon
   // DzSecurityIcon
 } from '../components/icons/stack/hostingIcons'
 
@@ -121,15 +121,22 @@ const StackSection = () => (
             <NodeIcon boxSize={8} />
           </span>
         </Tooltip>
-        <Tooltip label="Express">
-          <span>
-            <ExpressIcon boxSize={8} />
-          </span>
+        <Tooltip label="ExpressJs">
+          <img src="/express_icon.png" style={{ width: '60px' }} />
         </Tooltip>
         <Tooltip label="MongoDB">
           <span>
             <MongodbIcon boxSize={8} />
           </span>
+        </Tooltip>
+        <Tooltip label="Mongoose">
+          <img src="/mongoose_icon.png" style={{ width: '50px' }} />
+        </Tooltip>
+        <Tooltip label="MySql">
+          <img src="/Mysql_icons.png" style={{ width: '50px' }} />
+        </Tooltip>
+        <Tooltip label="sequelize">
+          <img src="/sequelize_icon.png" style={{ width: '40px' }} />
         </Tooltip>
         <Tooltip label="JWT">
           <span>
@@ -167,7 +174,7 @@ const StackSection = () => (
           </span>
         </Tooltip>
         <Tooltip label="DzSecurity">
-          <img src="/DZSecurity.png" style={{width:"100px"}} />
+          <img src="/DZSecurity.png" style={{ width: '100px' }} />
         </Tooltip>
       </Stack>
     </Box>
