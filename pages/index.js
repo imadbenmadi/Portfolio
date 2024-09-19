@@ -64,14 +64,15 @@ const Page = () => {
           <Paragraph>
             Hey there! I&apos;m Benmadi Imed-Eddine, a dedicated computer
             science graduate with plans to specialize in data science for my
-            master&apos;s degree. I work as a full-stack web developer, leveraging
-            technologies such as Express.js, Node.js, MySQL, Sequelize, MongoDb,
-            Mongoose, and React.js and TaillwindCss to build robust web
-            applications for startups, small, and large companies. I&apos;m always
-            open to learning and discovering new things, and I enjoy facing new
-            challenges and finding innovative ways to solve them.
+            master&apos;s degree. I work as a full-stack web developer,
+            leveraging technologies such as Express.js, Node.js, MySQL,
+            Sequelize, MongoDb, Mongoose, and React.js and TaillwindCss to build
+            robust web applications for startups, small, and large companies.
+            I&apos;m always open to learning and discovering new things, and I
+            enjoy facing new challenges and finding innovative ways to solve
+            them.
           </Paragraph>
-          
+
           <Paragraph>
             Let&apos;s chat and see how we can create something awesome
             together!
@@ -145,7 +146,7 @@ const Page = () => {
             </ListItem>
             <ListItem>
               <Link
-                href="https://www.instagram.com/_imad_benmadi_/"
+                href="https://www.instagram.com/imed.benmadi/"
                 target="_blank"
               >
                 <Button
@@ -153,7 +154,7 @@ const Page = () => {
                   colorScheme={useColorModeValue('blue', 'red')}
                   leftIcon={<IoLogoInstagram />}
                 >
-                  @_imad_benmadi_
+                  @imed.benmadi
                 </Button>
               </Link>
             </ListItem>
