@@ -23,7 +23,6 @@ import thumbXO from '../public/images/projects/XO.png'
 import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
 import thumbPrayingTimes from '../public/images/projects/PrayingTimes.png'
 import thumbPortfolio_old from '../public/images/projects/Portfolio_old.png'
-export { getStaticProps } from '../components/chakra'
 const projects = () => (
   <Layout title="Portfolio">
     <Container>
@@ -112,3 +111,6 @@ const projects = () => (
 
 export default projects
 // export { getServerSideProps } from '../components/chakra'
+export async function getStaticProps() {
+  return { props: {} }
+}
