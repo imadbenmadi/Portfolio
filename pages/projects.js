@@ -18,6 +18,7 @@ import thumbAOS from '../public/images/projects/AOS.png'
 import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
 import thumbSkate from '../public/images/projects/Skate2.png'
 import thumbDzdicom from '../public/images/projects/Dzidcom/1.png'
+import thumbFlexEdu from '../public/images/projects/FlexEdu/1.jpg'
 import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
 import thumbXO from '../public/images/projects/XO.png'
 import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
@@ -34,6 +35,10 @@ const projects = () => (
         <WorkGridItem id="Dzidcom" title="Dzidcom" thumbnail={thumbDzdicom}>
           Dzidcom Platform
         </WorkGridItem>
+        <WorkGridItem id="FlexEdu" title="FlexEdu" thumbnail={thumbFlexEdu}>
+          FlexEdu Platform
+        </WorkGridItem>
+
         <WorkGridItem id="Skate" title="Skate" thumbnail={thumbSkate}>
           Skate Platform
         </WorkGridItem>
