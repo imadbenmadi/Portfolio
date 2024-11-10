@@ -13,7 +13,8 @@ import {
   JSIcon,
   ReactIcon,
   TailWindIcon,
-  ViteIcon
+  ViteIcon,
+  TSIcon
 } from '../components/icons/stack/frontIcons'
 import {
   NodeIcon,
@@ -33,6 +34,35 @@ const StackSection = () => (
     <Heading as="h3" variant="section-title">
       Skills
     </Heading>
+    <Box
+      borderRadius="lg"
+      bg={useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')}
+      p={3}
+      mb={6}
+      textAlign="center"
+    >
+      <Heading as="h4" size="md" marginBottom={2}>
+        Programming Languages
+      </Heading>
+      <Stack
+        direction={{ base: 'row', xs: 'column' }}
+        display={'flex'}
+        justifyContent="center"
+        alignItems="center"
+        spacing="18px"
+        wrap={'wrap'}
+      >
+        <Tooltip label="Java">
+          <img src="/Java.png" style={{ width: '30px' }} />
+        </Tooltip>
+        <Tooltip label="JavaScript">
+          <img src="/JS.png" style={{ width: '30px' }} />
+        </Tooltip>
+        <Tooltip label="Python">
+          <img src="/Python.png" style={{ width: '30px' }} />
+        </Tooltip>
+      </Stack>
+    </Box>
     <Box
       borderRadius="lg"
       bg={useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')}
@@ -66,20 +96,23 @@ const StackSection = () => (
             <JSIcon boxSize={8} />
           </span>
         </Tooltip>
-        {/* <Tooltip label="TypeScript">
+        <Tooltip label="TypeScript">
           <span>
             <TSIcon boxSize={8} />
           </span>
-        </Tooltip> */}
+        </Tooltip>
         <Tooltip label="React">
           <span>
             <ReactIcon boxSize={8} />
           </span>
         </Tooltip>
-
-        <Tooltip label="React Router">
-          <img src="/react-router.png" style={{ width: '50px' }} />
+        <Tooltip label="Angular">
+          <img src="/Angular.png" style={{ width: '50px' }} />
         </Tooltip>
+
+        {/* <Tooltip label="React Router">
+          <img src="/react-router.png" style={{ width: '50px' }} />
+        </Tooltip> */}
         <Tooltip label="Tailwind CSS">
           <span>
             <TailWindIcon boxSize={8} />
@@ -128,6 +161,35 @@ const StackSection = () => (
         <Tooltip label="ExpressJs">
           <img src="/express_icon.png" style={{ width: '60px' }} />
         </Tooltip>
+        <Tooltip label="Spring Boot">
+          <img src="/Spring.png" style={{ width: '40px' }} />
+        </Tooltip>
+
+        <Tooltip label="JWT">
+          <span>
+            <JWTIcon boxSize={8} />
+          </span>
+        </Tooltip>
+      </Stack>
+    </Box>
+    <Box
+      borderRadius="lg"
+      bg={useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')}
+      p={3}
+      mb={6}
+      textAlign="center"
+    >
+      <Heading as="h4" size="md" marginBottom={2}>
+        Databases
+      </Heading>
+      <Stack
+        direction={{ base: 'row', xs: 'column' }}
+        display={'flex'}
+        justifyContent="center"
+        alignItems="center"
+        spacing="18px"
+        wrap={'wrap'}
+      >
         <Tooltip label="MongoDB">
           <span>
             <MongodbIcon boxSize={8} />
@@ -141,11 +203,6 @@ const StackSection = () => (
         </Tooltip>
         <Tooltip label="sequelize">
           <img src="/sequelize_icon.png" style={{ width: '40px' }} />
-        </Tooltip>
-        <Tooltip label="JWT">
-          <span>
-            <JWTIcon boxSize={8} />
-          </span>
         </Tooltip>
       </Stack>
     </Box>
