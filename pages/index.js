@@ -18,7 +18,6 @@ import { MdEmail } from 'react-icons/md'
 import StackSection from '../components/stack'
 import Image from 'next/image'
 
-
 const Page = () => {
   return (
     <Layout>
@@ -62,21 +61,20 @@ const Page = () => {
             About Me
           </Heading>
           <Paragraph>
-            Hey there! I&apos;m Benmadi Imed-Eddine, a dedicated computer
-            science graduate with plans to specialize in data science for my
-            master&apos;s degree. I work as a full-stack web developer,
-            leveraging technologies such as Express.js, Node.js, MySQL,
-            Sequelize, MongoDb, Mongoose, and React.js and TaillwindCss to build
-            robust web applications for startups, small, and large companies.
-            I&apos;m always open to learning and discovering new things, and I
-            enjoy facing new challenges and finding innovative ways to solve
-            them.
+            I’m Benmadi Imed-Eddine, a computer science graduate currently
+            specializing in data science for my master’s degree. Residing in
+            Budapest, Hungary, I work as a full-stack web developer, creating
+            robust websites and Platforms for startups, small businesses, and
+            large enterprises. I am passionate about continuous learning and
+            thrive on tackling new challenges and devising innovative solutions
+            .
           </Paragraph>
 
           <Paragraph>
             Let&apos;s chat and see how we can create something awesome
             together!
           </Paragraph>
+
           <Button
             variant="ghost"
             colorScheme={useColorModeValue('blue', 'red')}
@@ -85,17 +83,36 @@ const Page = () => {
               benmadi.imadeedin@univ-ouargla.dz
             </a>
           </Button>
-          <Box textAlign="center" my={6} ml={0}>
-            <Button
-              as={NextLink}
-              href="/projects"
-              scroll={false}
-              rightIcon={<ChevronRightIcon />}
-              colorScheme={useColorModeValue('blue', 'red')}
-            >
-              My Protfolio
-            </Button>
-          </Box>
+          <Section
+            display="flex"
+            flexDirection={{ base: 'column', md: 'row' }}
+            alignItems="center"
+            justifyContent="center"
+            gap={4}
+            my={6}
+          >
+            <Box textAlign="center" my={6} ml={0}>
+              <Button
+                as="a"
+                href="/CV.pdf"
+                download
+                colorScheme={useColorModeValue('blue', 'red')}
+              >
+                Download CV
+              </Button>
+            </Box>
+            <Box textAlign="center" my={6} ml={0}>
+              <Button
+                as={NextLink}
+                href="/projects"
+                scroll={false}
+                rightIcon={<ChevronRightIcon />}
+                colorScheme={useColorModeValue('blue', 'red')}
+              >
+                My Protfolio
+              </Button>
+            </Box>
+          </Section>
         </Section>
 
         <StackSection />
@@ -107,7 +124,7 @@ const Page = () => {
           <List spacing={4} fontSize="20px">
             <ListItem>
               <Link
-                href="mailto:benmadi.imadeedin@univ-ouargla.dz"
+                href="mailto:benmadi.imed@gmail.com"
                 target="_blank"
               >
                 <Button
@@ -115,7 +132,7 @@ const Page = () => {
                   colorScheme={useColorModeValue('blue', 'red')}
                   leftIcon={<MdEmail />}
                 >
-                  benmadi.imadeedin@univ-ouargla.dz
+                  benmadi.imed@gmail.com
                 </Button>
               </Link>
             </ListItem>
