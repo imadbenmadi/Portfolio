@@ -18,7 +18,7 @@ import thumbAOS from '../public/images/projects/AOS.png'
 import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
 import thumbSkate from '../public/images/projects/Skate2.png'
 import thumbDzdicom from '../public/images/projects/Dzidcom/1.png'
-import thumbFlexEdu from '../public/images/projects/FlexEdu/1.jpg'
+import thumbFlexEdu from '../public/images/projects/FlexEdu/image.png'
 import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
 import thumbXO from '../public/images/projects/XO.png'
 import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
@@ -31,7 +31,7 @@ const projects = () => (
         Projects
       </Heading>
 
-      <SimpleGrid columns={[1, 1, 1]} gap={6}>
+      <SimpleGrid columns={[1, 1, 1]} gap={16}>
         <WorkGridItem id="Dzidcom" title="Dzidcom" thumbnail={thumbDzdicom}>
           Dzidcom Platform
         </WorkGridItem>
