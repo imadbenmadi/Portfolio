@@ -79,6 +79,7 @@ export default function AdminSkills({ initialData }) {
   const toast = useToast()
   const cardBg = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.700')
+  const pillBg = useColorModeValue('gray.50', 'gray.700')
 
   function openAdd() {
     setForm(emptyForm)
@@ -189,7 +190,7 @@ export default function AdminSkills({ initialData }) {
                 {group.items.map(item => (
                   <HStack
                     key={item.id}
-                    bg={useColorModeValue('gray.50', 'gray.700')}
+                    bg={pillBg}
                     borderRadius="md"
                     px={3}
                     py={2}
