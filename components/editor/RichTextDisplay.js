@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import parse from 'html-react-parser'
-import DOMPurify from 'isomorphic-dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 const RichTextDisplay = ({
   content,
@@ -11,8 +11,8 @@ const RichTextDisplay = ({
   const sanitizedContent = useMemo(() => {
     if (!content) return ''
 
-    const cleanContent = DOMPurify.sanitize(content, {
-      ALLOWED_TAGS: [
+    const cleanContent = sanitizeHtml(content, {
+      allowedTags: [
         'p',
         'br',
         'strong',
@@ -38,18 +38,17 @@ const RichTextDisplay = ({
         'div',
         'span'
       ],
-      ALLOWED_ATTR: [
-        'href',
-        'target',
-        'rel',
-        'class',
-        'style',
-        'color',
-        'background-color',
-        'frameborder',
-        'allowfullscreen'
-      ],
-      ALLOW_DATA_ATTR: false
+      allowedAttributes: {
+        a: ['href', 'target', 'rel'],
+        iframe: ['src', 'frameborder', 'allowfullscreen'],
+        '*': ['class', 'style']
+      },
+      allowedStyles: {
+        '*': {
+          color: [/.*/],
+          'background-color': [/.*/]
+        }
+      }
     })
 
     if (maxLength && cleanContent.length > maxLength) {
