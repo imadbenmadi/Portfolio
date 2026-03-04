@@ -1,5 +1,15 @@
 module.exports = {
   reactStrictMode: true,
-  output: 'export',
-  images: { unoptimized: true }
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.vercel-storage.com'
+      },
+      {
+        protocol: 'https',
+        hostname: '**.public.blob.vercel-storage.com'
+      }
+    ]
+  }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import NextLink from 'next/link'
 import {
   Container,
@@ -7,115 +6,120 @@ import {
   Divider,
   Button,
   useColorModeValue,
-  Box
+  Box,
+  Text,
+  Center,
+  VStack
 } from '@chakra-ui/react'
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import { WorkGridItem } from '../components/grid-item'
-import { IoLogoGithub } from 'react-icons/io5'
+import { IoLogoGithub, IoAdd } from 'react-icons/io5'
 
-import thumbAOS from '../public/images/projects/AOS.png'
-import thumbAlgerieTelecome from '../public/images/projects/AlgerieTelecome3.png'
-import thumbSkate from '../public/images/projects/Skate2.png'
-import thumbDzdicom from '../public/images/projects/Dzidcom/1.png'
-import thumbFlexEdu from '../public/images/projects/FlexEdu/image.png'
-import thumbInfosolutions from '../public/images/projects/Infosolutions.png'
-import thumbXO from '../public/images/projects/XO.png'
-import thumbRockPaperSeasor from '../public/images/projects/RockPaperSeasor.png'
-import thumbPrayingTimes from '../public/images/projects/PrayingTimes.png'
-import thumbPortfolio_old from '../public/images/projects/Portfolio_old.png'
-const projects = () => (
-  <Layout title="Portfolio">
-    <Container>
-      <Heading as="h3" fontSize={20} my={4}>
-        Projects
-      </Heading>
+const Projects = ({ mainProjects, oldProjects }) => {
+  const colorScheme = useColorModeValue('blue', 'red')
 
-      <SimpleGrid columns={[1, 1, 1]} gap={16}>
-        <WorkGridItem id="Dzidcom" title="Dzidcom" thumbnail={thumbDzdicom}>
-          Dzidcom Platform
-        </WorkGridItem>
-        <WorkGridItem id="FlexEdu" title="FlexEdu" thumbnail={thumbFlexEdu}>
-          FlexEdu Platform
-        </WorkGridItem>
-
-        <WorkGridItem id="Skate" title="Skate" thumbnail={thumbSkate}>
-          Skate Platform
-        </WorkGridItem>
-        <WorkGridItem id="AOS" title="Algerify" thumbnail={thumbAOS}>
-          Algerify
-        </WorkGridItem>
-        <WorkGridItem
-          id="InfoSolutions"
-          title="InfoSolutions"
-          thumbnail={thumbInfosolutions}
-        >
-          Info-Solutions
-        </WorkGridItem>
-        <WorkGridItem
-          id="AlgerieTelecome"
-          title="Algerie Telecome"
-          thumbnail={thumbAlgerieTelecome}
-        >
-          Customer Service Improvement Project
-        </WorkGridItem>
-      </SimpleGrid>
-      <Section delay={0.4}>
-        <Divider my={6} />
-
-        <Heading as="h3" fontSize={20} mb={4}>
-          Old projects
+  return (
+    <Layout title="Portfolio">
+      <Container>
+        <Heading as="h3" fontSize={20} my={4}>
+          Projects
         </Heading>
-      </Section>
 
-      <SimpleGrid columns={[1, 1, 2]} gap={6}>
-        <Section delay={0.5}>
-          <WorkGridItem id="XO" title="XO" thumbnail={thumbXO}>
-            Simple XO Game
-          </WorkGridItem>
-        </Section>
-        <Section delay={0.5}>
-          <WorkGridItem
-            id="RockPaperSeasor"
-            title="Rock Paper Seasor"
-            thumbnail={thumbRockPaperSeasor}
+        {mainProjects.length === 0 ? (
+          <Center py={16}>
+            <VStack spacing={3}>
+              <Text color="gray.500">No projects added yet.</Text>
+              <Button
+                as={NextLink}
+                href="/dashboard/admin/projects"
+                colorScheme={colorScheme}
+                leftIcon={<IoAdd />}
+                size="sm"
+              >
+                Add from Dashboard
+              </Button>
+            </VStack>
+          </Center>
+        ) : (
+          <SimpleGrid columns={[1, 1, 1]} gap={16}>
+            {mainProjects.map((project, i) => (
+              <Section key={project.id} delay={0.1 + i * 0.05}>
+                <WorkGridItem
+                  id={project.slug}
+                  title={project.title}
+                  thumbnail={project.thumbnail_url || '/images/placeholder.png'}
+                >
+                  {project.description}
+                </WorkGridItem>
+              </Section>
+            ))}
+          </SimpleGrid>
+        )}
+
+        {oldProjects.length > 0 && (
+          <>
+            <Section delay={0.3}>
+              <Divider my={6} />
+              <Heading as="h3" fontSize={20} mb={4}>
+                Old Projects
+              </Heading>
+            </Section>
+            <SimpleGrid columns={[1, 1, 2]} gap={6}>
+              {oldProjects.map((project, i) => (
+                <Section key={project.id} delay={0.1 + i * 0.05}>
+                  <WorkGridItem
+                    id={project.slug}
+                    title={project.title}
+                    thumbnail={
+                      project.thumbnail_url || '/images/placeholder.png'
+                    }
+                  >
+                    {project.description}
+                  </WorkGridItem>
+                </Section>
+              ))}
+            </SimpleGrid>
+          </>
+        )}
+
+        <Box textAlign="center" my={6}>
+          <Button
+            as={NextLink}
+            href="https://github.com/imadbenmadi"
+            target="_blank"
+            scroll={false}
+            rightIcon={<IoLogoGithub />}
+            colorScheme={colorScheme}
           >
-            Simple Rock Paper Seasor Game
-          </WorkGridItem>
-        </Section>
-        <Section delay={0.5}>
-          <WorkGridItem
-            id="PrayingTimes"
-            title="Praying Times App"
-            thumbnail={thumbPrayingTimes}
-          ></WorkGridItem>
-        </Section>
-        <Section delay={0.5}>
-          <WorkGridItem
-            id="Portfolio_old"
-            title="Old Version Of my protfolio"
-            thumbnail={thumbPortfolio_old}
-          ></WorkGridItem>
-        </Section>
-      </SimpleGrid>
+            View All on GitHub
+          </Button>
+        </Box>
+      </Container>
+    </Layout>
+  )
+}
 
-      <Box textAlign="center" my={2} mb={4}>
-        <Button
-          as={NextLink}
-          href="https://github.com/imadbenmadi"
-          scroll={false}
-          rightIcon={<IoLogoGithub />}
-          colorScheme={useColorModeValue('blue', 'red')}
-        >
-          View All in GitHub
-        </Button>
-      </Box>
-    </Container>
-  </Layout>
-)
+export default Projects
 
-export default projects
-// export { getServerSideProps } from '../components/chakra'
-export async function getStaticProps() {
-  return { props: {} }
+export async function getServerSideProps() {
+  try {
+    const { getAllProjects } = await import('../lib/db')
+    const all = await getAllProjects()
+
+    const serialize = p => ({
+      ...p,
+      created_at: p.created_at?.toISOString?.() || null,
+      updated_at: p.updated_at?.toISOString?.() || null
+    })
+
+    return {
+      props: {
+        mainProjects: all.filter(p => p.category === 'main').map(serialize),
+        oldProjects: all.filter(p => p.category === 'old').map(serialize)
+      }
+    }
+  } catch {
+    return { props: { mainProjects: [], oldProjects: [] } }
+  }
 }
