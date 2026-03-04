@@ -2,7 +2,7 @@ import Layout from '../components/layouts/main'
 import Fonts from '../components/fonts'
 import { AnimatePresence } from 'framer-motion'
 import Chakra from '../components/chakra'
-import 'react-quill/dist/quill.snow.css'
+import 'quilljs/dist/quill.snow.css'
 import '../components/editor/RichTextEditor.css'
 import '../components/editor/RichTextDisplay.css'
 

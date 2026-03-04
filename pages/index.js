@@ -7,7 +7,13 @@ import {
   Button,
   useColorModeValue,
   List,
-  ListItem
+  ListItem,
+  Wrap,
+  WrapItem,
+  HStack,
+  Text,
+  Image,
+  Badge
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import RichTextDisplay from '../components/editor/RichTextDisplay'
@@ -15,10 +21,118 @@ import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import { IoLogoInstagram, IoLogoGithub, IoLogoLinkedin } from 'react-icons/io5'
 import { MdEmail } from 'react-icons/md'
-import StackSection from '../components/stack'
-import Image from 'next/image'
+import NextImage from 'next/image'
 
-const Page = ({ homepage }) => {
+const CATEGORY_COLORS = {
+  languages: 'yellow',
+  frontend: 'blue',
+  backend: 'green',
+  databases: 'orange',
+  hosting: 'purple',
+  other: 'gray'
+}
+
+const CATEGORY_LABELS = {
+  languages: 'Programming Languages',
+  frontend: 'Frontend',
+  backend: 'Backend',
+  databases: 'Databases',
+  hosting: 'Hosting / DevOps',
+  other: 'Other'
+}
+
+const CATEGORY_ORDER = [
+  'languages',
+  'frontend',
+  'backend',
+  'databases',
+  'hosting',
+  'other'
+]
+
+function SkillsPreview({ skills }) {
+  const cardBg = useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')
+  const pillBg = useColorModeValue('white', 'gray.700')
+  const pillBorder = useColorModeValue('gray.200', 'gray.600')
+
+  if (!skills || skills.length === 0) return null
+
+  const groups = CATEGORY_ORDER.map(cat => ({
+    cat,
+    items: skills.filter(s => s.category === cat)
+  })).filter(g => g.items.length > 0)
+
+  return (
+    <Section delay={0.2}>
+      <Heading as="h3" variant="section-title">
+        Skills
+      </Heading>
+      <Box>
+        {groups.map(({ cat, items }) => (
+          <Box
+            key={cat}
+            bg={cardBg}
+            borderRadius="xl"
+            p={4}
+            mb={4}
+            textAlign="center"
+          >
+            <Heading as="h4" size="sm" mb={3}>
+              <Badge
+                colorScheme={CATEGORY_COLORS[cat]}
+                fontSize="sm"
+                px={2}
+                py={0.5}
+                borderRadius="md"
+                variant="subtle"
+              >
+                {CATEGORY_LABELS[cat]}
+              </Badge>
+            </Heading>
+            <Wrap justify="center" spacing={2}>
+              {items.map(skill => (
+                <WrapItem key={skill.id}>
+                  <HStack
+                    bg={pillBg}
+                    border="1px"
+                    borderColor={pillBorder}
+                    borderRadius="lg"
+                    px={3}
+                    py={1.5}
+                    spacing={2}
+                  >
+                    {skill.icon_url && (
+                      <Image
+                        src={skill.icon_url}
+                        alt={skill.name}
+                        boxSize="18px"
+                        objectFit="contain"
+                      />
+                    )}
+                    <Text fontSize="sm">{skill.name}</Text>
+                  </HStack>
+                </WrapItem>
+              ))}
+            </Wrap>
+          </Box>
+        ))}
+        <Box textAlign="center" mt={2}>
+          <Button
+            as={NextLink}
+            href="/skills"
+            size="sm"
+            variant="ghost"
+            rightIcon={<ChevronRightIcon />}
+          >
+            View all skills
+          </Button>
+        </Box>
+      </Box>
+    </Section>
+  )
+}
+
+const Page = ({ homepage, skills }) => {
   const hp = homepage || {}
   const colorScheme = useColorModeValue('blue', 'red')
   const borderColor = useColorModeValue('gray.800', 'whiteAlpha.900')
@@ -48,7 +162,7 @@ const Page = ({ homepage }) => {
               borderRadius="full"
               overflow="hidden"
             >
-              <Image
+              <NextImage
                 src={hp.profile_image_url || '/images/imad.jpg'}
                 alt="profile pic"
                 width="200"
@@ -116,7 +230,7 @@ const Page = ({ homepage }) => {
           </Section>
         </Section>
 
-        <StackSection />
+        <SkillsPreview skills={skills} />
 
         <Section delay={0.3}>
           <Heading as="h3" variant="section-title">
@@ -203,11 +317,23 @@ const Page = ({ homepage }) => {
 export default Page
 export async function getServerSideProps() {
   try {
-    const { getHomepage } = await import('../lib/db')
-    const homepage = await getHomepage()
-    return { props: { homepage: homepage || null } }
+    const { getHomepage, getAllSkills } = await import('../lib/db')
+    const [homepage, skills] = await Promise.all([
+      getHomepage(),
+      getAllSkills()
+    ])
+    const serializeSkill = s => ({
+      ...s,
+      created_at: s.created_at?.toISOString?.() || null
+    })
+    return {
+      props: {
+        homepage: homepage || null,
+        skills: (skills || []).map(serializeSkill)
+      }
+    }
   } catch {
     // DB not configured yet — return empty props, static defaults apply
-    return { props: { homepage: null } }
+    return { props: { homepage: null, skills: [] } }
   }
 }

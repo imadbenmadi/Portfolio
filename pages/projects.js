@@ -14,7 +14,7 @@ import {
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 import { WorkGridItem } from '../components/grid-item'
-import { IoLogoGithub, IoAdd } from 'react-icons/io5'
+import { IoLogoGithub } from 'react-icons/io5'
 
 const Projects = ({ mainProjects, oldProjects }) => {
   const colorScheme = useColorModeValue('blue', 'red')
@@ -28,18 +28,7 @@ const Projects = ({ mainProjects, oldProjects }) => {
 
         {mainProjects.length === 0 ? (
           <Center py={16}>
-            <VStack spacing={3}>
-              <Text color="gray.500">No projects added yet.</Text>
-              <Button
-                as={NextLink}
-                href="/dashboard/admin/projects"
-                colorScheme={colorScheme}
-                leftIcon={<IoAdd />}
-                size="sm"
-              >
-                Add from Dashboard
-              </Button>
-            </VStack>
+            <Text color="gray.500">No projects yet.</Text>
           </Center>
         ) : (
           <SimpleGrid columns={[1, 1, 1]} gap={16}>

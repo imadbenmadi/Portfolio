@@ -61,6 +61,11 @@ export default function AdminOverview({ stats, dbReady }) {
             label: 'Education',
             value: stats.education,
             href: '/dashboard/admin/education'
+          },
+          {
+            label: 'Skills',
+            value: stats.skills,
+            href: '/dashboard/admin/skills'
           }
         ].map(item => (
           <Box
@@ -102,6 +107,11 @@ export default function AdminOverview({ stats, dbReady }) {
             + Add Education
           </Button>
         </NextLink>
+        <NextLink href="/dashboard/admin/skills" passHref legacyBehavior>
+          <Button as="a" colorScheme="teal" variant="outline">
+            + Add Skill
+          </Button>
+        </NextLink>
         <NextLink href="/dashboard/admin/homepage" passHref legacyBehavior>
           <Button as="a" colorScheme="orange" variant="outline">
             Edit Homepage
@@ -129,20 +139,22 @@ export async function getServerSideProps({ req }) {
     }
   }
 
-  let stats = { projects: 0, experiences: 0, education: 0 }
+  let stats = { projects: 0, experiences: 0, education: 0, skills: 0 }
   let dbReady = false
 
   try {
     const { sql } = await import('../../../lib/db')
-    const [p, e, ed] = await Promise.all([
+    const [p, e, ed, sk] = await Promise.all([
       sql`SELECT COUNT(*) FROM projects`,
       sql`SELECT COUNT(*) FROM experiences`,
-      sql`SELECT COUNT(*) FROM education`
+      sql`SELECT COUNT(*) FROM education`,
+      sql`SELECT COUNT(*) FROM skills`
     ])
     stats = {
       projects: parseInt(p.rows[0].count),
       experiences: parseInt(e.rows[0].count),
-      education: parseInt(ed.rows[0].count)
+      education: parseInt(ed.rows[0].count),
+      skills: parseInt(sk.rows[0].count)
     }
     dbReady = true
   } catch {

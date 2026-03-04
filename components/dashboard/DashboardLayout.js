@@ -19,7 +19,8 @@ import {
   IoBriefcase,
   IoSchool,
   IoNewspaper,
-  IoGrid
+  IoGrid,
+  IoCode
 } from 'react-icons/io5'
 
 const navItems = [
@@ -31,6 +32,7 @@ const navItems = [
     icon: IoNewspaper
   },
   { href: '/dashboard/admin/education', label: 'Education', icon: IoSchool },
+  { href: '/dashboard/admin/skills', label: 'Skills', icon: IoCode },
   { href: '/dashboard/admin/homepage', label: 'Homepage', icon: IoHome }
 ]
 

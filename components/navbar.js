@@ -83,6 +83,12 @@ const Navbar = props => {
           <LinkItem href="/projects" path={path}>
             Projects
           </LinkItem>
+          <LinkItem href="/experience" path={path}>
+            Experience
+          </LinkItem>
+          <LinkItem href="/skills" path={path}>
+            Skills
+          </LinkItem>
           <LinkItem
             target="_blank"
             href="https://github.com/imadbenmadi"
@@ -92,7 +98,7 @@ const Navbar = props => {
             style={{ gap: 4 }}
             pl={2}
           >
-            <IoLogoGithub  />
+            <IoLogoGithub />
             Github
           </LinkItem>
         </Stack>
@@ -115,10 +121,13 @@ const Navbar = props => {
                 <MenuItem as={MenuLink} href="/projects">
                   Projects
                 </MenuItem>
-                <MenuItem
-                  as={MenuLink}
-                  href="https://github.com/imadbenmadi"
-                >
+                <MenuItem as={MenuLink} href="/experience">
+                  Experience
+                </MenuItem>
+                <MenuItem as={MenuLink} href="/skills">
+                  Skills
+                </MenuItem>
+                <MenuItem as={MenuLink} href="https://github.com/imadbenmadi">
                   Github
                 </MenuItem>
               </MenuList>
