@@ -90,6 +90,64 @@ function SkillIcon({ item }) {
   return null
 }
 
+function CategoryGroup({
+  group,
+  cardBg,
+  borderColor,
+  pillBg,
+  onEdit,
+  onDelete,
+  onDragEnd
+}) {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
+  )
+
+  return (
+    <Box
+      bg={cardBg}
+      border="1px"
+      borderColor={borderColor}
+      borderRadius="lg"
+      p={5}
+      shadow="sm"
+    >
+      <Heading
+        size="sm"
+        mb={4}
+        color={`${(CATEGORY_BY_VALUE[group.cat.value] || group.cat).color || 'gray'}.500`}
+      >
+        {group.cat.label}
+      </Heading>
+      <Text fontSize="xs" color="gray.500" mb={3}>
+        Drag to reorder.
+      </Text>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+      >
+        <SortableContext
+          items={group.items.map(s => String(s.id))}
+          strategy={verticalListSortingStrategy}
+        >
+          <VStack spacing={2} align="stretch">
+            {group.items.map(item => (
+              <SortableSkillRow
+                key={item.id}
+                item={item}
+                pillBg={pillBg}
+                onEdit={() => onEdit(item)}
+                onDelete={() => onDelete(item.id)}
+              />
+            ))}
+          </VStack>
+        </SortableContext>
+      </DndContext>
+    </Box>
+  )
+}
+
 function SortableSkillRow({ item, pillBg, onEdit, onDelete }) {
   const {
     attributes,
@@ -157,6 +215,7 @@ export default function AdminSkills({ initialData }) {
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [seeding, setSeeding] = useState(false)
   const [uploadingIcon, setUploadingIcon] = useState(false)
   const [deleteId, setDeleteId] = useState(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -171,10 +230,6 @@ export default function AdminSkills({ initialData }) {
   const pillBg = useColorModeValue('gray.50', 'gray.700')
   const iconFileRef = useRef()
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
-  )
-
   const groups = useMemo(() => {
     const sorted = [...(items || [])].sort(sortByOrderThenName)
     return SKILL_CATEGORIES.map(cat => {
@@ -183,10 +238,61 @@ export default function AdminSkills({ initialData }) {
     }).filter(g => g.items.length > 0)
   }, [items])
 
+  function makeDragEnd(category) {
+    return function handleDragEnd(event) {
+      const { active, over } = event
+      if (!over || active.id === over.id) return
+
+      const activeId = Number(active.id)
+      const overId = Number(over.id)
+
+      const categoryItems = items
+        .filter(s => (s.category || 'other') === category)
+        .sort(sortByOrderThenName)
+
+      const oldIndex = categoryItems.findIndex(s => s.id === activeId)
+      const newIndex = categoryItems.findIndex(s => s.id === overId)
+      if (oldIndex < 0 || newIndex < 0) return
+
+      const reordered = arrayMove(categoryItems, oldIndex, newIndex)
+      const orderedIds = reordered.map(s => s.id)
+
+      // Optimistic UI update
+      setItems(prev => {
+        const other = prev.filter(s => (s.category || 'other') !== category)
+        const updated = reordered.map((s, idx) => ({ ...s, sort_order: idx }))
+        return [...other, ...updated]
+      })
+
+      persistReorder(category, orderedIds)
+    }
+  }
+
   function openAdd() {
     setForm(emptyForm)
     setEditId(null)
     onOpen()
+  }
+
+  async function handleSeedDefaults() {
+    setSeeding(true)
+    try {
+      const res = await fetch('/api/skills/seed', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Seed failed')
+      setItems(Array.isArray(data.skills) ? data.skills : [])
+      toast({
+        title: data.insertedCount
+          ? `${data.insertedCount} skill(s) added`
+          : 'All built-in skills already present',
+        status: 'success',
+        duration: 2500
+      })
+    } catch (err) {
+      toast({ title: err.message, status: 'error', duration: 4000 })
+    } finally {
+      setSeeding(false)
+    }
   }
   function openEdit(item) {
     setForm({
@@ -281,7 +387,6 @@ export default function AdminSkills({ initialData }) {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      // Replace only this category with server-confirmed rows
       setItems(prev => {
         const keep = prev.filter(s => (s.category || 'other') !== category)
         return [...keep, ...(data || [])]
@@ -289,39 +394,6 @@ export default function AdminSkills({ initialData }) {
     } catch (err) {
       toast({ title: err.message, status: 'error', duration: 4000 })
     }
-  }
-
-  function handleDragEnd(event) {
-    const { active, over } = event
-    if (!over) return
-    if (active.id === over.id) return
-
-    const activeId = Number(active.id)
-    const overId = Number(over.id)
-    const activeItem = items.find(s => s.id === activeId)
-    const overItem = items.find(s => s.id === overId)
-    if (!activeItem || !overItem) return
-    if ((activeItem.category || 'other') !== (overItem.category || 'other'))
-      return
-
-    const category = activeItem.category || 'other'
-    const categoryItems = items
-      .filter(s => (s.category || 'other') === category)
-      .sort(sortByOrderThenName)
-    const oldIndex = categoryItems.findIndex(s => s.id === activeId)
-    const newIndex = categoryItems.findIndex(s => s.id === overId)
-    if (oldIndex < 0 || newIndex < 0) return
-
-    const reordered = arrayMove(categoryItems, oldIndex, newIndex)
-    const orderedIds = reordered.map(s => s.id)
-
-    setItems(prev => {
-      const other = prev.filter(s => (s.category || 'other') !== category)
-      const updated = reordered.map((s, idx) => ({ ...s, sort_order: idx }))
-      return [...other, ...updated]
-    })
-
-    persistReorder(category, orderedIds)
   }
 
   async function handleDelete() {
@@ -340,69 +412,55 @@ export default function AdminSkills({ initialData }) {
     <DashboardLayout title="Skills">
       <HStack justify="space-between" mb={6}>
         <Text color="gray.500">{items.length} skill(s)</Text>
-        <Button leftIcon={<IoAdd />} colorScheme="blue" onClick={openAdd}>
-          Add Skill
-        </Button>
+        <HStack>
+          <Button
+            variant="outline"
+            isLoading={seeding}
+            onClick={handleSeedDefaults}
+          >
+            Seed built-in skills
+          </Button>
+          <Button leftIcon={<IoAdd />} colorScheme="blue" onClick={openAdd}>
+            Add Skill
+          </Button>
+        </HStack>
       </HStack>
 
       {items.length === 0 ? (
         <Center py={16}>
           <VStack>
             <Text color="gray.500">No skills yet.</Text>
-            <Button colorScheme="blue" onClick={openAdd}>
-              Add your first skill
-            </Button>
+            <HStack>
+              <Button
+                variant="outline"
+                isLoading={seeding}
+                onClick={handleSeedDefaults}
+              >
+                Seed built-in skills
+              </Button>
+              <Button colorScheme="blue" onClick={openAdd}>
+                Add your first skill
+              </Button>
+            </HStack>
           </VStack>
         </Center>
       ) : (
         <VStack spacing={6} align="stretch">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            {groups.map(group => (
-              <Box
-                key={group.cat.value}
-                bg={cardBg}
-                border="1px"
-                borderColor={borderColor}
-                borderRadius="lg"
-                p={5}
-                shadow="sm"
-              >
-                <Heading
-                  size="sm"
-                  mb={4}
-                  color={`${(CATEGORY_BY_VALUE[group.cat.value] || group.cat).color || 'gray'}.500`}
-                >
-                  {group.cat.label}
-                </Heading>
-                <Text fontSize="xs" color="gray.500" mb={3}>
-                  Drag skills to change their order.
-                </Text>
-                <SortableContext
-                  items={group.items.map(s => String(s.id))}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <VStack spacing={2} align="stretch">
-                    {group.items.map(item => (
-                      <SortableSkillRow
-                        key={item.id}
-                        item={item}
-                        pillBg={pillBg}
-                        onEdit={() => openEdit(item)}
-                        onDelete={() => {
-                          setDeleteId(item.id)
-                          onDelOpen()
-                        }}
-                      />
-                    ))}
-                  </VStack>
-                </SortableContext>
-              </Box>
-            ))}
-          </DndContext>
+          {groups.map(group => (
+            <CategoryGroup
+              key={group.cat.value}
+              group={group}
+              cardBg={cardBg}
+              borderColor={borderColor}
+              pillBg={pillBg}
+              onEdit={openEdit}
+              onDelete={id => {
+                setDeleteId(id)
+                onDelOpen()
+              }}
+              onDragEnd={makeDragEnd(group.cat.value)}
+            />
+          ))}
         </VStack>
       )}
 
