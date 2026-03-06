@@ -13,7 +13,9 @@ export default async function handler(req, res) {
       if (!Array.isArray(orderedIds)) {
         return res
           .status(400)
-          .json({ error: 'Expected { category?: string, orderedIds: number[] }' })
+          .json({
+            error: 'Expected { category?: string, orderedIds: number[] }'
+          })
       }
       const rows = await reorderProjects(category, orderedIds)
       return res.status(200).json(rows)

@@ -270,7 +270,9 @@ export default function AdminProjects({ initialProjects }) {
                 onDragEnd={({ active, over }) => {
                   if (!over || active.id === over.id) return
                   const prevAll = projects
-                  const oldIndex = mainProjects.findIndex(p => p.id === active.id)
+                  const oldIndex = mainProjects.findIndex(
+                    p => p.id === active.id
+                  )
                   const newIndex = mainProjects.findIndex(p => p.id === over.id)
                   if (oldIndex < 0 || newIndex < 0) return
                   const nextMain = arrayMove(mainProjects, oldIndex, newIndex)
@@ -316,7 +318,9 @@ export default function AdminProjects({ initialProjects }) {
                 onDragEnd={({ active, over }) => {
                   if (!over || active.id === over.id) return
                   const prevAll = projects
-                  const oldIndex = oldProjects.findIndex(p => p.id === active.id)
+                  const oldIndex = oldProjects.findIndex(
+                    p => p.id === active.id
+                  )
                   const newIndex = oldProjects.findIndex(p => p.id === over.id)
                   if (oldIndex < 0 || newIndex < 0) return
                   const nextOld = arrayMove(oldProjects, oldIndex, newIndex)
