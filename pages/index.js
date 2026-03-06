@@ -13,7 +13,8 @@ import {
   HStack,
   Text,
   Image,
-  Badge
+  Badge,
+  Center
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import RichTextDisplay from '../components/editor/RichTextDisplay'
@@ -22,6 +23,7 @@ import Section from '../components/section'
 import { IoLogoInstagram, IoLogoGithub, IoLogoLinkedin } from 'react-icons/io5'
 import { MdEmail } from 'react-icons/md'
 import NextImage from 'next/image'
+import PdfThumbnail from '../components/PdfThumbnail'
 
 import {
   SKILL_CATEGORIES,
@@ -214,10 +216,11 @@ function TimelineItem({ item, isLast }) {
   )
 }
 
-const Page = ({ homepage, skills, experiences, education }) => {
+const Page = ({ homepage, skills, experiences, education, certificates }) => {
   const hp = homepage || {}
   const colorScheme = useColorModeValue('blue', 'red')
   const borderColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+  const certCardBg = useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')
   return (
     <Layout>
       <Container>
@@ -273,13 +276,76 @@ const Page = ({ homepage, skills, experiences, education }) => {
             }
           />
 
-          <Button variant="ghost" colorScheme={colorScheme}>
-            <a
-              href={`mailto:${hp.email || 'benmadi.imadeedin@univ-ouargla.dz'}`}
-            >
-              {hp.email || 'benmadi.imadeedin@univ-ouargla.dz'}
-            </a>
-          </Button>
+          <List spacing={4} fontSize="20px">
+            <ListItem>
+              <Link
+                href={`mailto:${hp.email || 'benmadi.imed@gmail.com'}`}
+                target="_blank"
+              >
+                <Button
+                  variant="ghost"
+                  colorScheme={colorScheme}
+                  leftIcon={<MdEmail />}
+                >
+                  {hp.email || 'benmadi.imed@gmail.com'}
+                </Button>
+              </Link>
+            </ListItem>
+            {(hp.github_url || true) && (
+              <ListItem>
+                <Link
+                  href={hp.github_url || 'https://github.com/imadbenmadi'}
+                  target="_blank"
+                >
+                  <Button
+                    variant="ghost"
+                    colorScheme={colorScheme}
+                    leftIcon={<IoLogoGithub />}
+                  >
+                    @imadbenmadi
+                  </Button>
+                </Link>
+              </ListItem>
+            )}
+            {(hp.linkedin_url || true) && (
+              <ListItem>
+                <Link
+                  href={
+                    hp.linkedin_url ||
+                    'https://www.linkedin.com/in/imad-benmadi-4b5a72236/'
+                  }
+                  target="_blank"
+                >
+                  <Button
+                    variant="ghost"
+                    colorScheme={colorScheme}
+                    leftIcon={<IoLogoLinkedin />}
+                  >
+                    @imadbenmadi
+                  </Button>
+                </Link>
+              </ListItem>
+            )}
+            {(hp.instagram_url || true) && (
+              <ListItem>
+                <Link
+                  href={
+                    hp.instagram_url ||
+                    'https://www.instagram.com/imed.benmadi/'
+                  }
+                  target="_blank"
+                >
+                  <Button
+                    variant="ghost"
+                    colorScheme={colorScheme}
+                    leftIcon={<IoLogoInstagram />}
+                  >
+                    @imed.benmadi
+                  </Button>
+                </Link>
+              </ListItem>
+            )}
+          </List>
           <Section
             display="flex"
             flexDirection={{ base: 'column', md: 'row' }}
@@ -356,6 +422,97 @@ const Page = ({ homepage, skills, experiences, education }) => {
                   isLast={i === education.length - 1}
                 />
               ))}
+            </Box>
+          </Section>
+        )}
+
+        {certificates && certificates.length > 0 && (
+          <Section delay={0.35}>
+            <Heading as="h3" variant="section-title" mt={8}>
+              Certificates
+            </Heading>
+            <Box>
+              <Wrap spacing={5} justify="center">
+                {certificates.map(c => {
+                  const isPdf =
+                    c.file_type === 'application/pdf' ||
+                    String(c.file_url || '')
+                      .toLowerCase()
+                      .includes('.pdf')
+                  return (
+                    <WrapItem key={c.id}>
+                      <Box
+                        bg={certCardBg}
+                        borderRadius="2xl"
+                        p={4}
+                        w={{ base: '240px', md: '260px' }}
+                      >
+                        <Center mb={3}>
+                          {isPdf ? (
+                            <PdfThumbnail
+                              url={c.file_url}
+                              alt={c.title}
+                              boxSize="180px"
+                              borderRadius="xl"
+                              borderWidth="0px"
+                            />
+                          ) : (
+                            <Image
+                              src={c.file_url}
+                              alt={c.title}
+                              w="180px"
+                              h="180px"
+                              objectFit="cover"
+                              borderRadius="xl"
+                            />
+                          )}
+                        </Center>
+
+                        <Text fontWeight="bold" noOfLines={2} mb={2}>
+                          {c.title}
+                        </Text>
+
+                        {[c.issuer, c.issue_date].filter(Boolean).length >
+                          0 && (
+                          <Text
+                            fontSize="sm"
+                            color="gray.500"
+                            noOfLines={1}
+                            mb={3}
+                          >
+                            {[c.issuer, c.issue_date]
+                              .filter(Boolean)
+                              .join(' • ')}
+                          </Text>
+                        )}
+
+                        <Button
+                          as={Link}
+                          href={c.file_url}
+                          isExternal
+                          w="full"
+                          size="sm"
+                          colorScheme="teal"
+                          variant="solid"
+                        >
+                          Open
+                        </Button>
+                      </Box>
+                    </WrapItem>
+                  )
+                })}
+              </Wrap>
+              <Box textAlign="center" mt={2}>
+                <Button
+                  as={NextLink}
+                  href="/certificates"
+                  size="sm"
+                  variant="ghost"
+                  rightIcon={<ChevronRightIcon />}
+                >
+                  View all certificates
+                </Button>
+              </Box>
             </Box>
           </Section>
         )}
@@ -445,14 +602,21 @@ const Page = ({ homepage, skills, experiences, education }) => {
 export default Page
 export async function getServerSideProps() {
   try {
-    const { getHomepage, getAllSkills, getAllExperiences, getAllEducation } =
-      await import('../lib/db')
-    const [homepage, skills, experiences, education] = await Promise.all([
-      getHomepage(),
-      getAllSkills(),
-      getAllExperiences(),
-      getAllEducation()
-    ])
+    const {
+      getHomepage,
+      getAllSkills,
+      getAllExperiences,
+      getAllEducation,
+      getAllCertificates
+    } = await import('../lib/db')
+    const [homepage, skills, experiences, education, certificates] =
+      await Promise.all([
+        getHomepage(),
+        getAllSkills(),
+        getAllExperiences(),
+        getAllEducation(),
+        getAllCertificates()
+      ])
     const serializeHomepage = h =>
       h
         ? {
@@ -468,18 +632,30 @@ export async function getServerSideProps() {
       ...s,
       created_at: s.created_at?.toISOString?.() || null
     })
+    const serializeCertificate = c => ({
+      ...c,
+      created_at: c.created_at?.toISOString?.() || null,
+      updated_at: c.updated_at?.toISOString?.() || null
+    })
     return {
       props: {
         homepage: serializeHomepage(homepage),
         skills: (skills || []).map(serializeSkill),
         experiences: (experiences || []).map(serializeTimelineRow),
-        education: (education || []).map(serializeTimelineRow)
+        education: (education || []).map(serializeTimelineRow),
+        certificates: (certificates || []).map(serializeCertificate)
       }
     }
   } catch {
     // DB not configured yet — return empty props, static defaults apply
     return {
-      props: { homepage: null, skills: [], experiences: [], education: [] }
+      props: {
+        homepage: null,
+        skills: [],
+        experiences: [],
+        education: [],
+        certificates: []
+      }
     }
   }
 }

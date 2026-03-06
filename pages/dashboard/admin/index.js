@@ -63,6 +63,11 @@ export default function AdminOverview({ stats, dbReady }) {
             href: '/dashboard/admin/education'
           },
           {
+            label: 'Certificates',
+            value: stats.certificates,
+            href: '/dashboard/admin/certificates'
+          },
+          {
             label: 'Skills',
             value: stats.skills,
             href: '/dashboard/admin/skills'
@@ -107,6 +112,11 @@ export default function AdminOverview({ stats, dbReady }) {
             + Add Education
           </Button>
         </NextLink>
+        <NextLink href="/dashboard/admin/certificates" passHref legacyBehavior>
+          <Button as="a" colorScheme="pink" variant="outline">
+            + Add Certificate
+          </Button>
+        </NextLink>
         <NextLink href="/dashboard/admin/skills" passHref legacyBehavior>
           <Button as="a" colorScheme="teal" variant="outline">
             + Add Skill
@@ -139,22 +149,37 @@ export async function getServerSideProps({ req }) {
     }
   }
 
-  let stats = { projects: 0, experiences: 0, education: 0, skills: 0 }
+  let stats = {
+    projects: 0,
+    experiences: 0,
+    education: 0,
+    certificates: 0,
+    skills: 0
+  }
   let dbReady = false
 
   try {
     const { sql } = await import('../../../lib/db')
-    const [p, e, ed, sk] = await Promise.all([
+    const [p, e, ed, c, sk] = await Promise.allSettled([
       sql`SELECT COUNT(*) FROM projects`,
       sql`SELECT COUNT(*) FROM experiences`,
       sql`SELECT COUNT(*) FROM education`,
+      sql`SELECT COUNT(*) FROM certificates`,
       sql`SELECT COUNT(*) FROM skills`
     ])
+
+    const readCount = result => {
+      if (result.status !== 'fulfilled') return 0
+      const countStr = result.value?.rows?.[0]?.count
+      const num = parseInt(countStr)
+      return Number.isFinite(num) ? num : 0
+    }
     stats = {
-      projects: parseInt(p.rows[0].count),
-      experiences: parseInt(e.rows[0].count),
-      education: parseInt(ed.rows[0].count),
-      skills: parseInt(sk.rows[0].count)
+      projects: readCount(p),
+      experiences: readCount(e),
+      education: readCount(ed),
+      certificates: readCount(c),
+      skills: readCount(sk)
     }
     dbReady = true
   } catch {

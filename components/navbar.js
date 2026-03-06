@@ -92,6 +92,9 @@ const Navbar = props => {
           <LinkItem href="/skills" path={path}>
             Skills
           </LinkItem>
+          <LinkItem href="/certificates" path={path}>
+            Certificates
+          </LinkItem>
           <LinkItem
             target="_blank"
             href="https://github.com/imadbenmadi"
@@ -129,6 +132,9 @@ const Navbar = props => {
                 </MenuItem>
                 <MenuItem as={MenuLink} href="/skills">
                   Skills
+                </MenuItem>
+                <MenuItem as={MenuLink} href="/certificates">
+                  Certificates
                 </MenuItem>
                 <MenuItem as={MenuLink} href="https://github.com/imadbenmadi">
                   Github
