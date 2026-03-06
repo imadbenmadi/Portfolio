@@ -38,10 +38,20 @@ function SkillsPreview({ skills }) {
 
   if (!skills || skills.length === 0) return null
 
+  const PRIORITY_CATEGORIES = ['data', 'cloud', 'devops']
+
   const groups = SKILL_CATEGORIES.map(cat => ({
     cat,
     items: skills.filter(s => s.category === cat.value)
-  })).filter(g => g.items.length > 0)
+  }))
+    .filter(g => g.items.length > 0)
+    .sort((a, b) => {
+      const ai = PRIORITY_CATEGORIES.indexOf(a.cat.value)
+      const bi = PRIORITY_CATEGORIES.indexOf(b.cat.value)
+      const ap = ai === -1 ? Infinity : ai
+      const bp = bi === -1 ? Infinity : bi
+      return ap - bp
+    })
 
   return (
     <Section delay={0.2}>
@@ -378,8 +388,6 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
           </Section>
         </Section>
 
-        <SkillsPreview skills={skills} />
-
         <Section delay={0.25}>
           <Heading as="h3" variant="section-title">
             Experience
@@ -425,6 +433,7 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
             </Box>
           </Section>
         )}
+        <SkillsPreview skills={skills} />
 
         {certificates && certificates.length > 0 && (
           <Section delay={0.35}>
@@ -432,7 +441,7 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
               Certificates
             </Heading>
             <Box>
-              <Wrap spacing={5} justify="center">
+              <Wrap spacing={{ base: 3, md: 5, lg: 6 }} justify="center">
                 {certificates.map(c => {
                   const isPdf =
                     c.file_type === 'application/pdf' ||
@@ -444,15 +453,32 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
                       <Box
                         bg={certCardBg}
                         borderRadius="2xl"
-                        p={4}
-                        w={{ base: '240px', md: '260px' }}
+                        p={{ base: 3, md: 5 }}
+                        w={{
+                          base: '160px',
+                          sm: '200px',
+                          md: '280px',
+                          lg: '50vw'
+                        }}
+                        shadow="sm"
+                        _hover={{
+                          shadow: 'md',
+                          transform: 'translateY(-2px)',
+                          transition: 'all 0.2s'
+                        }}
+                        transition="all 0.2s"
                       >
                         <Center mb={3}>
                           {isPdf ? (
                             <PdfThumbnail
                               url={c.file_url}
                               alt={c.title}
-                              boxSize="180px"
+                              boxSize={{
+                                base: '120px',
+                                sm: '160px',
+                                md: '220px',
+                                lg: '80%'
+                              }}
                               borderRadius="xl"
                               borderWidth="0px"
                             />
@@ -460,22 +486,37 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
                             <Image
                               src={c.file_url}
                               alt={c.title}
-                              w="180px"
-                              h="180px"
+                              w={{
+                                base: '120px',
+                                sm: '160px',
+                                md: '220px',
+                                lg: '80%'
+                              }}
+                              h={{
+                                base: '120px',
+                                sm: '160px',
+                                md: '220px',
+                                lg: '260px'
+                              }}
                               objectFit="cover"
                               borderRadius="xl"
                             />
                           )}
                         </Center>
 
-                        <Text fontWeight="bold" noOfLines={2} mb={2}>
+                        <Text
+                          fontWeight="bold"
+                          noOfLines={2}
+                          mb={1}
+                          fontSize={{ base: 'sm', md: 'md' }}
+                        >
                           {c.title}
                         </Text>
 
                         {[c.issuer, c.issue_date].filter(Boolean).length >
                           0 && (
                           <Text
-                            fontSize="sm"
+                            fontSize={{ base: 'xs', md: 'sm' }}
                             color="gray.500"
                             noOfLines={1}
                             mb={3}
@@ -491,7 +532,7 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
                           href={c.file_url}
                           isExternal
                           w="full"
-                          size="sm"
+                          size={{ base: 'xs', md: 'sm' }}
                           colorScheme="teal"
                           variant="solid"
                         >
