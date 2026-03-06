@@ -11,6 +11,11 @@ export function middleware(request) {
 
   // Only protect /dashboard/admin paths
   if (pathname.startsWith('/dashboard/admin')) {
+    // Skip auth in local dev when DEV_SKIP_AUTH=true
+    if (process.env.DEV_SKIP_AUTH === 'true') {
+      return NextResponse.next()
+    }
+
     const token = request.cookies.get(COOKIE_NAME)?.value
     if (!token) {
       const loginUrl = new URL('/dashboard', request.url)

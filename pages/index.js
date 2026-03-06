@@ -23,32 +23,11 @@ import { IoLogoInstagram, IoLogoGithub, IoLogoLinkedin } from 'react-icons/io5'
 import { MdEmail } from 'react-icons/md'
 import NextImage from 'next/image'
 
-const CATEGORY_COLORS = {
-  languages: 'yellow',
-  frontend: 'blue',
-  backend: 'green',
-  databases: 'orange',
-  hosting: 'purple',
-  other: 'gray'
-}
-
-const CATEGORY_LABELS = {
-  languages: 'Programming Languages',
-  frontend: 'Frontend',
-  backend: 'Backend',
-  databases: 'Databases',
-  hosting: 'Hosting / DevOps',
-  other: 'Other'
-}
-
-const CATEGORY_ORDER = [
-  'languages',
-  'frontend',
-  'backend',
-  'databases',
-  'hosting',
-  'other'
-]
+import {
+  SKILL_CATEGORIES,
+  CATEGORY_BY_VALUE,
+  BUILTIN_ICON_BY_VALUE
+} from '../lib/skillsMeta'
 
 function SkillsPreview({ skills }) {
   const cardBg = useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')
@@ -57,9 +36,9 @@ function SkillsPreview({ skills }) {
 
   if (!skills || skills.length === 0) return null
 
-  const groups = CATEGORY_ORDER.map(cat => ({
+  const groups = SKILL_CATEGORIES.map(cat => ({
     cat,
-    items: skills.filter(s => s.category === cat)
+    items: skills.filter(s => s.category === cat.value)
   })).filter(g => g.items.length > 0)
 
   return (
@@ -70,7 +49,7 @@ function SkillsPreview({ skills }) {
       <Box>
         {groups.map(({ cat, items }) => (
           <Box
-            key={cat}
+            key={cat.value}
             bg={cardBg}
             borderRadius="xl"
             p={4}
@@ -79,14 +58,16 @@ function SkillsPreview({ skills }) {
           >
             <Heading as="h4" size="sm" mb={3}>
               <Badge
-                colorScheme={CATEGORY_COLORS[cat]}
+                colorScheme={
+                  (CATEGORY_BY_VALUE[cat.value] || cat).color || 'gray'
+                }
                 fontSize="sm"
                 px={2}
                 py={0.5}
                 borderRadius="md"
                 variant="subtle"
               >
-                {CATEGORY_LABELS[cat]}
+                {(CATEGORY_BY_VALUE[cat.value] || cat).label || cat.label}
               </Badge>
             </Heading>
             <Wrap justify="center" spacing={2}>
@@ -101,13 +82,21 @@ function SkillsPreview({ skills }) {
                     py={1.5}
                     spacing={2}
                   >
-                    {skill.icon_url && (
-                      <Image
-                        src={skill.icon_url}
-                        alt={skill.name}
+                    {skill.icon_name &&
+                    BUILTIN_ICON_BY_VALUE[skill.icon_name] ? (
+                      <Box
+                        as={BUILTIN_ICON_BY_VALUE[skill.icon_name].Icon}
                         boxSize="18px"
-                        objectFit="contain"
                       />
+                    ) : (
+                      skill.icon_url && (
+                        <Image
+                          src={skill.icon_url}
+                          alt={skill.name}
+                          boxSize="18px"
+                          objectFit="contain"
+                        />
+                      )
                     )}
                     <Text fontSize="sm">{skill.name}</Text>
                   </HStack>
@@ -132,7 +121,100 @@ function SkillsPreview({ skills }) {
   )
 }
 
-const Page = ({ homepage, skills }) => {
+function TimelineItem({ item, isLast }) {
+  const cardBg = useColorModeValue('white', 'gray.800')
+  const borderColor = useColorModeValue('gray.200', 'gray.600')
+  const dotBg = useColorModeValue('teal.400', 'teal.300')
+  const lineBg = useColorModeValue('gray.200', 'gray.600')
+  const companyColor = useColorModeValue('teal.600', 'teal.300')
+
+  return (
+    <Box display="flex" gap={0}>
+      {/* Timeline axis */}
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        mr={5}
+        flexShrink={0}
+      >
+        {/* Dot */}
+        <Box
+          w="14px"
+          h="14px"
+          borderRadius="full"
+          bg={dotBg}
+          mt="6px"
+          flexShrink={0}
+          zIndex={1}
+          boxShadow={`0 0 0 3px ${useColorModeValue('#e2e8f0', '#4a5568')}`}
+        />
+        {/* Line */}
+        {!isLast && <Box w="2px" flex={1} bg={lineBg} mt={1} />}
+      </Box>
+
+      {/* Card */}
+      <Box
+        flex={1}
+        bg={cardBg}
+        border="1px"
+        borderColor={borderColor}
+        borderRadius="xl"
+        p={5}
+        mb={isLast ? 0 : 6}
+        shadow="sm"
+        _hover={{
+          shadow: 'md',
+          transform: 'translateY(-1px)',
+          transition: 'all 0.2s'
+        }}
+        transition="all 0.2s"
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          flexWrap="wrap"
+          gap={2}
+        >
+          <Box>
+            <Heading size="sm" mb={1}>
+              {item.role}
+            </Heading>
+            <Text fontWeight="semibold" color={companyColor} fontSize="sm">
+              {item.company}
+            </Text>
+            {item.location && (
+              <Text fontSize="xs" color="gray.500" mt={0.5}>
+                {item.location}
+              </Text>
+            )}
+          </Box>
+          <Badge
+            colorScheme="teal"
+            variant="subtle"
+            fontSize="xs"
+            px={2}
+            py={1}
+            borderRadius="md"
+            flexShrink={0}
+          >
+            {item.start_date}
+            {item.end_date ? ` – ${item.end_date}` : ' – Present'}
+          </Badge>
+        </Box>
+
+        {item.description && (
+          <Box mt={3}>
+            <RichTextDisplay content={item.description} />
+          </Box>
+        )}
+      </Box>
+    </Box>
+  )
+}
+
+const Page = ({ homepage, skills, experiences, education }) => {
   const hp = homepage || {}
   const colorScheme = useColorModeValue('blue', 'red')
   const borderColor = useColorModeValue('gray.800', 'whiteAlpha.900')
@@ -232,7 +314,53 @@ const Page = ({ homepage, skills }) => {
 
         <SkillsPreview skills={skills} />
 
-        <Section delay={0.3}>
+        <Section delay={0.25}>
+          <Heading as="h3" variant="section-title">
+            Experience
+          </Heading>
+
+          {!experiences || experiences.length === 0 ? (
+            <Text color="gray.500" py={8} textAlign="center">
+              No experiences added yet.
+            </Text>
+          ) : (
+            <Box>
+              {experiences.map((item, i) => (
+                <TimelineItem
+                  key={item.id}
+                  item={item}
+                  isLast={i === experiences.length - 1}
+                />
+              ))}
+            </Box>
+          )}
+        </Section>
+
+        {education && education.length > 0 && (
+          <Section delay={0.3}>
+            <Heading as="h3" variant="section-title" mt={8}>
+              Education
+            </Heading>
+            <Box>
+              {education.map((item, i) => (
+                <TimelineItem
+                  key={item.id}
+                  item={{
+                    role: item.degree + (item.field ? ` in ${item.field}` : ''),
+                    company: item.institution,
+                    location: null,
+                    start_date: item.start_date,
+                    end_date: item.end_date,
+                    description: item.description
+                  }}
+                  isLast={i === education.length - 1}
+                />
+              ))}
+            </Box>
+          </Section>
+        )}
+
+        <Section delay={0.4}>
           <Heading as="h3" variant="section-title">
             Contact Me
           </Heading>
@@ -317,23 +445,41 @@ const Page = ({ homepage, skills }) => {
 export default Page
 export async function getServerSideProps() {
   try {
-    const { getHomepage, getAllSkills } = await import('../lib/db')
-    const [homepage, skills] = await Promise.all([
+    const { getHomepage, getAllSkills, getAllExperiences, getAllEducation } =
+      await import('../lib/db')
+    const [homepage, skills, experiences, education] = await Promise.all([
       getHomepage(),
-      getAllSkills()
+      getAllSkills(),
+      getAllExperiences(),
+      getAllEducation()
     ])
+    const serializeHomepage = h =>
+      h
+        ? {
+            ...h,
+            updated_at: h.updated_at?.toISOString?.() || null
+          }
+        : null
+    const serializeTimelineRow = row => ({
+      ...row,
+      created_at: row.created_at?.toISOString?.() || null
+    })
     const serializeSkill = s => ({
       ...s,
       created_at: s.created_at?.toISOString?.() || null
     })
     return {
       props: {
-        homepage: homepage || null,
-        skills: (skills || []).map(serializeSkill)
+        homepage: serializeHomepage(homepage),
+        skills: (skills || []).map(serializeSkill),
+        experiences: (experiences || []).map(serializeTimelineRow),
+        education: (education || []).map(serializeTimelineRow)
       }
     }
   } catch {
     // DB not configured yet — return empty props, static defaults apply
-    return { props: { homepage: null, skills: [] } }
+    return {
+      props: { homepage: null, skills: [], experiences: [], education: [] }
+    }
   }
 }

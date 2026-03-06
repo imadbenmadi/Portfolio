@@ -26,6 +26,7 @@ export default function DashboardLogin() {
 
   const cardBg = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.700')
+  const pageBg = useColorModeValue('#f0e7db', '#202023')
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -65,7 +66,7 @@ export default function DashboardLogin() {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg={useColorModeValue('gray.50', 'gray.900')}
+        bg={pageBg}
       >
         <Container maxW="sm">
           <Box

@@ -38,9 +38,12 @@ const navItems = [
 
 export default function DashboardLayout({ children, title }) {
   const router = useRouter()
-  const bg = useColorModeValue('gray.50', 'gray.900')
-  const sidebarBg = useColorModeValue('white', 'gray.800')
-  const borderColor = useColorModeValue('gray.200', 'gray.700')
+  const bg = useColorModeValue('#f0e7db', '#202023')
+  const sidebarBg = useColorModeValue('#fffaf5', '#2a2a2d')
+  const borderColor = useColorModeValue(
+    'rgba(0,0,0,0.1)',
+    'rgba(255,255,255,0.1)'
+  )
   const activeBg = useColorModeValue('blue.50', 'blue.900')
   const activeColor = useColorModeValue('blue.600', 'blue.300')
 
@@ -125,7 +128,7 @@ export default function DashboardLayout({ children, title }) {
       </Box>
 
       {/* Main content */}
-      <Box flex={1} overflow="auto">
+      <Box flex={1} overflow="auto" bg={bg}>
         {/* Top bar */}
         <Box
           bg={sidebarBg}

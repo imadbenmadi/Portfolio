@@ -14,18 +14,18 @@ import {
 import Layout from '../components/layouts/article'
 import Section from '../components/section'
 
-const CATEGORIES = [
-  { value: 'languages', label: 'Programming Languages', color: 'yellow' },
-  { value: 'frontend', label: 'Frontend', color: 'blue' },
-  { value: 'backend', label: 'Backend', color: 'green' },
-  { value: 'databases', label: 'Databases', color: 'orange' },
-  { value: 'hosting', label: 'Hosting / DevOps', color: 'purple' },
-  { value: 'other', label: 'Other', color: 'gray' }
-]
+import {
+  SKILL_CATEGORIES,
+  CATEGORY_BY_VALUE,
+  BUILTIN_ICON_BY_VALUE
+} from '../lib/skillsMeta'
 
 function SkillPill({ skill }) {
   const bg = useColorModeValue('whiteAlpha.800', 'whiteAlpha.100')
   const border = useColorModeValue('gray.200', 'gray.600')
+  const builtIn = skill.icon_name
+    ? BUILTIN_ICON_BY_VALUE[skill.icon_name]
+    : null
 
   return (
     <HStack
@@ -43,13 +43,17 @@ function SkillPill({ skill }) {
       }}
       transition="all 0.2s"
     >
-      {skill.icon_url && (
-        <Image
-          src={skill.icon_url}
-          alt={skill.name}
-          boxSize="22px"
-          objectFit="contain"
-        />
+      {builtIn ? (
+        <Box as={builtIn.Icon} boxSize="22px" />
+      ) : (
+        skill.icon_url && (
+          <Image
+            src={skill.icon_url}
+            alt={skill.name}
+            boxSize="22px"
+            objectFit="contain"
+          />
+        )
       )}
       <Text fontSize="sm" fontWeight="medium">
         {skill.name}
@@ -62,7 +66,7 @@ export default function Skills({ skills }) {
   const cardBg = useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')
 
   // Filter categories that have at least one skill
-  const groups = CATEGORIES.filter(cat =>
+  const groups = SKILL_CATEGORIES.filter(cat =>
     skills.some(s => s.category === cat.value)
   )
 
@@ -81,19 +85,20 @@ export default function Skills({ skills }) {
           <Box>
             {groups.map((cat, i) => {
               const catSkills = skills.filter(s => s.category === cat.value)
+              const meta = CATEGORY_BY_VALUE[cat.value] || cat
               return (
                 <Section key={cat.value} delay={0.1 + i * 0.05}>
                   <Box bg={cardBg} borderRadius="xl" p={5} mb={4}>
                     <Heading as="h4" size="md" mb={4}>
                       <Badge
-                        colorScheme={cat.color}
+                        colorScheme={meta.color || 'gray'}
                         fontSize="md"
                         px={3}
                         py={1}
                         borderRadius="md"
                         variant="subtle"
                       >
-                        {cat.label}
+                        {meta.label || cat.label}
                       </Badge>
                     </Heading>
                     <Wrap spacing={3}>

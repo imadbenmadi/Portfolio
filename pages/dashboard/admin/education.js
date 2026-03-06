@@ -292,7 +292,8 @@ export async function getServerSideProps({ req }) {
     return { redirect: { destination: '/dashboard', permanent: false } }
   try {
     const { getAllEducation } = await import('../../../lib/db')
-    return { props: { initialData: await getAllEducation() } }
+    const initialData = JSON.parse(JSON.stringify(await getAllEducation()))
+    return { props: { initialData } }
   } catch {
     return { props: { initialData: [] } }
   }

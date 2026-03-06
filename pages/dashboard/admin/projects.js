@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useMemo, useState, useRef } from 'react'
 import RichTextEditor from '../../../components/editor/RichTextEditor'
 import {
   Box,
@@ -31,8 +31,22 @@ import {
   Spinner,
   Center
 } from '@chakra-ui/react'
-import { IoAdd, IoPencil, IoTrash, IoCloudUpload } from 'react-icons/io5'
+import {
+  IoAdd,
+  IoPencil,
+  IoTrash,
+  IoCloudUpload,
+  IoReorderThree
+} from 'react-icons/io5'
 import DashboardLayout from '../../../components/dashboard/DashboardLayout'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import {
+  SortableContext,
+  rectSortingStrategy,
+  arrayMove,
+  useSortable
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 const emptyForm = {
   title: '',
@@ -52,6 +66,7 @@ export default function AdminProjects({ initialProjects }) {
   const [editId, setEditId] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [reordering, setReordering] = useState(false)
   const [deleteId, setDeleteId] = useState(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
@@ -61,6 +76,22 @@ export default function AdminProjects({ initialProjects }) {
   } = useDisclosure()
   const fileRef = useRef()
   const toast = useToast()
+
+  const mainProjects = useMemo(
+    () => projects.filter(p => (p.category || 'main') === 'main'),
+    [projects]
+  )
+  const oldProjects = useMemo(
+    () => projects.filter(p => p.category === 'old'),
+    [projects]
+  )
+  const otherProjects = useMemo(
+    () => projects.filter(p => p.category !== 'main' && p.category !== 'old'),
+    [projects]
+  )
+
+  const mainIds = useMemo(() => mainProjects.map(p => p.id), [mainProjects])
+  const oldIds = useMemo(() => oldProjects.map(p => p.id), [oldProjects])
 
   const cardBg = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.700')
@@ -140,7 +171,7 @@ export default function AdminProjects({ initialProjects }) {
         setProjects(ps => ps.map(p => (p.id === editId ? data : p)))
         toast({ title: 'Project updated!', status: 'success', duration: 2000 })
       } else {
-        setProjects(ps => [data, ...ps])
+        setProjects(ps => [...ps, data])
         toast({ title: 'Project added!', status: 'success', duration: 2000 })
       }
       onClose()
@@ -168,6 +199,39 @@ export default function AdminProjects({ initialProjects }) {
     }
   }
 
+  async function persistOrder(category, nextProjects, prevProjects) {
+    setReordering(true)
+    try {
+      const res = await fetch('/api/projects/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category,
+          orderedIds: nextProjects.map(p => p.id)
+        })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Reorder failed')
+      setProjects(data)
+    } catch (err) {
+      setProjects(prevProjects)
+      toast({ title: err.message, status: 'error', duration: 4000 })
+    } finally {
+      setReordering(false)
+    }
+  }
+
+  function applyCategoryOrder(category, nextCategoryList) {
+    // Keep a stable grouping: main -> old -> other
+    if (category === 'main') {
+      return [...nextCategoryList, ...oldProjects, ...otherProjects]
+    }
+    if (category === 'old') {
+      return [...mainProjects, ...nextCategoryList, ...otherProjects]
+    }
+    return [...mainProjects, ...oldProjects, ...otherProjects]
+  }
+
   return (
     <DashboardLayout title="Projects">
       <HStack justify="space-between" mb={6}>
@@ -187,69 +251,123 @@ export default function AdminProjects({ initialProjects }) {
           </VStack>
         </Center>
       ) : (
-        <SimpleGrid columns={[1, 1, 2]} gap={4}>
-          {projects.map(project => (
-            <Box
-              key={project.id}
-              bg={cardBg}
-              border="1px"
-              borderColor={borderColor}
-              borderRadius="lg"
-              p={4}
-              shadow="sm"
-            >
-              <HStack justify="space-between" align="start">
-                <Box flex={1} mr={2}>
-                  <HStack mb={1} flexWrap="wrap">
-                    <Heading size="sm">{project.title}</Heading>
-                    <Badge
-                      colorScheme={
-                        project.category === 'main' ? 'blue' : 'gray'
-                      }
-                    >
-                      {project.category}
-                    </Badge>
-                    {project.year && (
-                      <Badge variant="outline">{project.year}</Badge>
-                    )}
-                  </HStack>
-                  <Text fontSize="sm" color="gray.500" noOfLines={2}>
-                    {project.description || 'No description'}
-                  </Text>
-                  <Text fontSize="xs" color="gray.400" mt={1}>
-                    /{project.slug}
-                  </Text>
-                </Box>
-                {project.thumbnail_url && (
-                  <Image
-                    src={project.thumbnail_url}
-                    alt={project.title}
-                    boxSize="64px"
-                    objectFit="cover"
-                    borderRadius="md"
-                    flexShrink={0}
+        <VStack spacing={6} align="stretch">
+          <Box>
+            <HStack justify="space-between" mb={2}>
+              <Heading size="sm">Main Projects</Heading>
+              <Text fontSize="sm" color="gray.500">
+                Drag to reorder ({mainProjects.length})
+              </Text>
+            </HStack>
+
+            {mainProjects.length === 0 ? (
+              <Text fontSize="sm" color="gray.500">
+                No main projects.
+              </Text>
+            ) : (
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={({ active, over }) => {
+                  if (!over || active.id === over.id) return
+                  const prevAll = projects
+                  const oldIndex = mainProjects.findIndex(p => p.id === active.id)
+                  const newIndex = mainProjects.findIndex(p => p.id === over.id)
+                  if (oldIndex < 0 || newIndex < 0) return
+                  const nextMain = arrayMove(mainProjects, oldIndex, newIndex)
+                  const nextAll = applyCategoryOrder('main', nextMain)
+                  setProjects(nextAll)
+                  persistOrder('main', nextMain, prevAll)
+                }}
+              >
+                <SortableContext items={mainIds} strategy={rectSortingStrategy}>
+                  <SimpleGrid columns={[1, 1, 2]} gap={4}>
+                    {mainProjects.map(project => (
+                      <SortableProjectCard
+                        key={project.id}
+                        project={project}
+                        cardBg={cardBg}
+                        borderColor={borderColor}
+                        onEdit={() => openEdit(project)}
+                        onDelete={() => confirmDelete(project.id)}
+                        disabled={reordering}
+                      />
+                    ))}
+                  </SimpleGrid>
+                </SortableContext>
+              </DndContext>
+            )}
+          </Box>
+
+          <Box>
+            <HStack justify="space-between" mb={2}>
+              <Heading size="sm">Old Projects</Heading>
+              <Text fontSize="sm" color="gray.500">
+                Drag to reorder ({oldProjects.length})
+              </Text>
+            </HStack>
+
+            {oldProjects.length === 0 ? (
+              <Text fontSize="sm" color="gray.500">
+                No old projects.
+              </Text>
+            ) : (
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={({ active, over }) => {
+                  if (!over || active.id === over.id) return
+                  const prevAll = projects
+                  const oldIndex = oldProjects.findIndex(p => p.id === active.id)
+                  const newIndex = oldProjects.findIndex(p => p.id === over.id)
+                  if (oldIndex < 0 || newIndex < 0) return
+                  const nextOld = arrayMove(oldProjects, oldIndex, newIndex)
+                  const nextAll = applyCategoryOrder('old', nextOld)
+                  setProjects(nextAll)
+                  persistOrder('old', nextOld, prevAll)
+                }}
+              >
+                <SortableContext items={oldIds} strategy={rectSortingStrategy}>
+                  <SimpleGrid columns={[1, 1, 2]} gap={4}>
+                    {oldProjects.map(project => (
+                      <SortableProjectCard
+                        key={project.id}
+                        project={project}
+                        cardBg={cardBg}
+                        borderColor={borderColor}
+                        onEdit={() => openEdit(project)}
+                        onDelete={() => confirmDelete(project.id)}
+                        disabled={reordering}
+                      />
+                    ))}
+                  </SimpleGrid>
+                </SortableContext>
+              </DndContext>
+            )}
+          </Box>
+
+          {otherProjects.length > 0 && (
+            <Box>
+              <HStack justify="space-between" mb={2}>
+                <Heading size="sm">Other</Heading>
+                <Text fontSize="sm" color="gray.500">
+                  {otherProjects.length} project(s)
+                </Text>
+              </HStack>
+              <SimpleGrid columns={[1, 1, 2]} gap={4}>
+                {otherProjects.map(project => (
+                  <SortableProjectCard
+                    key={project.id}
+                    project={project}
+                    cardBg={cardBg}
+                    borderColor={borderColor}
+                    onEdit={() => openEdit(project)}
+                    onDelete={() => confirmDelete(project.id)}
+                    disabled={true}
                   />
-                )}
-              </HStack>
-              <HStack mt={3} spacing={2}>
-                <IconButton
-                  size="sm"
-                  icon={<IoPencil />}
-                  aria-label="Edit"
-                  onClick={() => openEdit(project)}
-                />
-                <IconButton
-                  size="sm"
-                  colorScheme="red"
-                  variant="ghost"
-                  icon={<IoTrash />}
-                  aria-label="Delete"
-                  onClick={() => confirmDelete(project.id)}
-                />
-              </HStack>
+                ))}
+              </SimpleGrid>
             </Box>
-          ))}
-        </SimpleGrid>
+          )}
+        </VStack>
       )}
 
       {/* Add / Edit Modal */}
@@ -439,6 +557,98 @@ export default function AdminProjects({ initialProjects }) {
   )
 }
 
+function SortableProjectCard({
+  project,
+  cardBg,
+  borderColor,
+  onEdit,
+  onDelete,
+  disabled
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: project.id, disabled })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
+
+  return (
+    <Box
+      ref={setNodeRef}
+      style={style}
+      bg={cardBg}
+      border="1px"
+      borderColor={borderColor}
+      borderRadius="lg"
+      p={4}
+      shadow={isDragging ? 'md' : 'sm'}
+      opacity={isDragging ? 0.9 : 1}
+    >
+      <HStack justify="space-between" align="start">
+        <Box flex={1} mr={2}>
+          <HStack mb={1} flexWrap="wrap">
+            <Heading size="sm">{project.title}</Heading>
+            <Badge colorScheme={project.category === 'main' ? 'blue' : 'gray'}>
+              {project.category}
+            </Badge>
+            {project.year && <Badge variant="outline">{project.year}</Badge>}
+          </HStack>
+          <Text fontSize="sm" color="gray.500" noOfLines={2}>
+            {project.description || 'No description'}
+          </Text>
+          <Text fontSize="xs" color="gray.400" mt={1}>
+            /{project.slug}
+          </Text>
+        </Box>
+        {project.thumbnail_url && (
+          <Image
+            src={project.thumbnail_url}
+            alt={project.title}
+            boxSize="64px"
+            objectFit="cover"
+            borderRadius="md"
+            flexShrink={0}
+          />
+        )}
+      </HStack>
+
+      <HStack mt={3} spacing={2}>
+        <IconButton
+          size="sm"
+          variant="ghost"
+          icon={<IoReorderThree />}
+          aria-label="Drag"
+          cursor={disabled ? 'not-allowed' : 'grab'}
+          isDisabled={disabled}
+          {...attributes}
+          {...listeners}
+        />
+        <IconButton
+          size="sm"
+          icon={<IoPencil />}
+          aria-label="Edit"
+          onClick={onEdit}
+        />
+        <IconButton
+          size="sm"
+          colorScheme="red"
+          variant="ghost"
+          icon={<IoTrash />}
+          aria-label="Delete"
+          onClick={onDelete}
+        />
+      </HStack>
+    </Box>
+  )
+}
+
 export async function getServerSideProps({ req }) {
   const { getAuthPayload } = await import('../../../lib/auth')
   const payload = getAuthPayload(req)
@@ -448,7 +658,8 @@ export async function getServerSideProps({ req }) {
   try {
     const { getAllProjects } = await import('../../../lib/db')
     const projects = await getAllProjects()
-    return { props: { initialProjects: projects } }
+    const initialProjects = JSON.parse(JSON.stringify(projects))
+    return { props: { initialProjects } }
   } catch {
     return { props: { initialProjects: [] } }
   }

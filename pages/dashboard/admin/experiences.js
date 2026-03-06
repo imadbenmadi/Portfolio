@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import RichTextEditor from '../../../components/editor/RichTextEditor'
 import {
   Box,
@@ -24,8 +24,16 @@ import {
   useDisclosure,
   Center
 } from '@chakra-ui/react'
-import { IoAdd, IoPencil, IoTrash } from 'react-icons/io5'
+import { IoAdd, IoPencil, IoTrash, IoReorderThree } from 'react-icons/io5'
 import DashboardLayout from '../../../components/dashboard/DashboardLayout'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  useSortable
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 const emptyForm = {
   company: '',
@@ -41,6 +49,7 @@ export default function AdminExperiences({ initialData }) {
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [reordering, setReordering] = useState(false)
   const [deleteId, setDeleteId] = useState(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
@@ -51,6 +60,8 @@ export default function AdminExperiences({ initialData }) {
   const toast = useToast()
   const cardBg = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.700')
+
+  const ids = useMemo(() => items.map(i => i.id), [items])
 
   function openAdd() {
     setForm(emptyForm)
@@ -94,7 +105,7 @@ export default function AdminExperiences({ initialData }) {
         setItems(ps => ps.map(p => (p.id === editId ? data : p)))
         toast({ title: 'Updated!', status: 'success', duration: 2000 })
       } else {
-        setItems(ps => [data, ...ps])
+        setItems(ps => [...ps, data])
         toast({ title: 'Added!', status: 'success', duration: 2000 })
       }
       onClose()
@@ -126,6 +137,25 @@ export default function AdminExperiences({ initialData }) {
     }
   }
 
+  async function persistOrder(nextItems, prevItems) {
+    setReordering(true)
+    try {
+      const res = await fetch('/api/experiences/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderedIds: nextItems.map(i => i.id) })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Reorder failed')
+      setItems(data)
+    } catch (err) {
+      setItems(prevItems)
+      toast({ title: err.message, status: 'error', duration: 4000 })
+    } finally {
+      setReordering(false)
+    }
+  }
+
   return (
     <DashboardLayout title="Experiences">
       <HStack justify="space-between" mb={6}>
@@ -145,61 +175,38 @@ export default function AdminExperiences({ initialData }) {
           </VStack>
         </Center>
       ) : (
-        <VStack spacing={4} align="stretch">
-          {items.map(item => (
-            <Box
-              key={item.id}
-              bg={cardBg}
-              border="1px"
-              borderColor={borderColor}
-              borderRadius="lg"
-              p={4}
-              shadow="sm"
-            >
-              <HStack justify="space-between">
-                <Box>
-                  <Heading size="sm">{item.role}</Heading>
-                  <Text fontWeight="medium" color="blue.500">
-                    {item.company}
-                  </Text>
-                  {item.location && (
-                    <Text fontSize="sm" color="gray.500">
-                      {item.location}
-                    </Text>
-                  )}
-                  <Text fontSize="sm" color="gray.400">
-                    {item.start_date}
-                    {item.end_date ? ` — ${item.end_date}` : ' — Present'}
-                  </Text>
-                  {item.description && (
-                    <Text fontSize="sm" mt={1} noOfLines={2}>
-                      {item.description}
-                    </Text>
-                  )}
-                </Box>
-                <HStack>
-                  <IconButton
-                    size="sm"
-                    icon={<IoPencil />}
-                    aria-label="Edit"
-                    onClick={() => openEdit(item)}
-                  />
-                  <IconButton
-                    size="sm"
-                    colorScheme="red"
-                    variant="ghost"
-                    icon={<IoTrash />}
-                    aria-label="Delete"
-                    onClick={() => {
-                      setDeleteId(item.id)
-                      onDelOpen()
-                    }}
-                  />
-                </HStack>
-              </HStack>
-            </Box>
-          ))}
-        </VStack>
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={({ active, over }) => {
+            if (!over || active.id === over.id) return
+            const prev = items
+            const oldIndex = items.findIndex(i => i.id === active.id)
+            const newIndex = items.findIndex(i => i.id === over.id)
+            if (oldIndex < 0 || newIndex < 0) return
+            const next = arrayMove(items, oldIndex, newIndex)
+            setItems(next)
+            persistOrder(next, prev)
+          }}
+        >
+          <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+            <VStack spacing={4} align="stretch">
+              {items.map(item => (
+                <SortableExperienceCard
+                  key={item.id}
+                  item={item}
+                  cardBg={cardBg}
+                  borderColor={borderColor}
+                  onEdit={() => openEdit(item)}
+                  onDelete={() => {
+                    setDeleteId(item.id)
+                    onDelOpen()
+                  }}
+                  disabled={reordering}
+                />
+              ))}
+            </VStack>
+          </SortableContext>
+        </DndContext>
       )}
 
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -250,10 +257,15 @@ export default function AdminExperiences({ initialData }) {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
+            <Button variant="ghost" mr={3} mt={12} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue" onClick={handleSave} isLoading={saving}>
+            <Button
+              colorScheme="blue"
+              mt={12}
+              onClick={handleSave}
+              isLoading={saving}
+            >
               {editId ? 'Save Changes' : 'Add'}
             </Button>
           </ModalFooter>
@@ -282,13 +294,102 @@ export default function AdminExperiences({ initialData }) {
   )
 }
 
+function SortableExperienceCard({
+  item,
+  cardBg,
+  borderColor,
+  onEdit,
+  onDelete,
+  disabled
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: item.id, disabled })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
+
+  return (
+    <Box
+      ref={setNodeRef}
+      style={style}
+      bg={cardBg}
+      border="1px"
+      borderColor={borderColor}
+      borderRadius="lg"
+      p={4}
+      shadow={isDragging ? 'md' : 'sm'}
+      opacity={isDragging ? 0.9 : 1}
+    >
+      <HStack justify="space-between" align="start">
+        <HStack align="start" spacing={3} flex={1}>
+          <IconButton
+            size="sm"
+            variant="ghost"
+            icon={<IoReorderThree />}
+            aria-label="Drag"
+            cursor={disabled ? 'not-allowed' : 'grab'}
+            isDisabled={disabled}
+            {...attributes}
+            {...listeners}
+          />
+          <Box flex={1}>
+            <Heading size="sm">{item.role}</Heading>
+            <Text fontWeight="medium" color="blue.500">
+              {item.company}
+            </Text>
+            {item.location && (
+              <Text fontSize="sm" color="gray.500">
+                {item.location}
+              </Text>
+            )}
+            <Text fontSize="sm" color="gray.400">
+              {item.start_date}
+              {item.end_date ? ` — ${item.end_date}` : ' — Present'}
+            </Text>
+            {item.description && (
+              <Text fontSize="sm" mt={1} noOfLines={2}>
+                {item.description}
+              </Text>
+            )}
+          </Box>
+        </HStack>
+        <HStack>
+          <IconButton
+            size="sm"
+            icon={<IoPencil />}
+            aria-label="Edit"
+            onClick={onEdit}
+          />
+          <IconButton
+            size="sm"
+            colorScheme="red"
+            variant="ghost"
+            icon={<IoTrash />}
+            aria-label="Delete"
+            onClick={onDelete}
+          />
+        </HStack>
+      </HStack>
+    </Box>
+  )
+}
+
 export async function getServerSideProps({ req }) {
   const { getAuthPayload } = await import('../../../lib/auth')
   if (!getAuthPayload(req))
     return { redirect: { destination: '/dashboard', permanent: false } }
   try {
     const { getAllExperiences } = await import('../../../lib/db')
-    return { props: { initialData: await getAllExperiences() } }
+    const initialData = JSON.parse(JSON.stringify(await getAllExperiences()))
+    return { props: { initialData } }
   } catch {
     return { props: { initialData: [] } }
   }

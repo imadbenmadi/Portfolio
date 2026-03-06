@@ -35,8 +35,10 @@ export default function AdminHomepage({ initialData }) {
   })
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [uploadingCv, setUploadingCv] = useState(false)
   const [saved, setSaved] = useState(false)
   const fileRef = useRef()
+  const cvFileRef = useRef()
   const toast = useToast()
   const cardBg = useColorModeValue('white', 'gray.800')
   const borderColor = useColorModeValue('gray.200', 'gray.700')
@@ -68,6 +70,25 @@ export default function AdminHomepage({ initialData }) {
       toast({ title: err.message, status: 'error', duration: 4000 })
     } finally {
       setUploading(false)
+    }
+  }
+
+  async function handleCvUpload(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingCv(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload/cv', { method: 'POST', body: fd })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setForm(p => ({ ...p, cv_url: data.url }))
+      toast({ title: 'CV uploaded!', status: 'success', duration: 2000 })
+    } catch (err) {
+      toast({ title: err.message, status: 'error', duration: 4000 })
+    } finally {
+      setUploadingCv(false)
     }
   }
 
@@ -110,16 +131,16 @@ export default function AdminHomepage({ initialData }) {
           shadow="sm"
         >
           <VStack spacing={5} align="stretch">
-            <SimpleGrid columns={2} gap={4}>
-              <FormControl>
-                <FormLabel>Your Name</FormLabel>
-                <Input {...f('name')} placeholder="Benmadi Imed Eddine" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Title / Role</FormLabel>
-                <Input {...f('title')} placeholder="Full Stack Web Developer" />
-              </FormControl>
-            </SimpleGrid>
+            {/* <SimpleGrid columns={2} gap={4}> */}
+            <FormControl>
+              <FormLabel>Your Name</FormLabel>
+              <Input {...f('name')} placeholder="Benmadi Imed Eddine" />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Title / Role</FormLabel>
+              <Input {...f('title')} placeholder="Full Stack Web Developer" />
+            </FormControl>
+            {/* </SimpleGrid> */}
 
             <FormControl>
               <FormLabel>Bio (first paragraph)</FormLabel>
@@ -131,7 +152,7 @@ export default function AdminHomepage({ initialData }) {
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl marginTop={12}>
               <FormLabel>Bio (second paragraph / call to action)</FormLabel>
               <RichTextEditor
                 value={form.bio2}
@@ -141,7 +162,7 @@ export default function AdminHomepage({ initialData }) {
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl marginTop={12}>
               <FormLabel>Email</FormLabel>
               <Input
                 {...f('email')}
@@ -149,34 +170,57 @@ export default function AdminHomepage({ initialData }) {
                 placeholder="you@example.com"
               />
             </FormControl>
-
-            <SimpleGrid columns={2} gap={4}>
-              <FormControl>
-                <FormLabel>GitHub URL</FormLabel>
+            {/* <SimpleGrid columns={2} gap={4}> */}
+            <FormControl>
+              <FormLabel>GitHub URL</FormLabel>
+              <Input
+                {...f('github_url')}
+                placeholder="https://github.com/..."
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>LinkedIn URL</FormLabel>
+              <Input
+                {...f('linkedin_url')}
+                placeholder="https://linkedin.com/in/..."
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Instagram URL</FormLabel>
+              <Input
+                {...f('instagram_url')}
+                placeholder="https://instagram.com/..."
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>CV / Resume URL</FormLabel>
+              <HStack>
                 <Input
-                  {...f('github_url')}
-                  placeholder="https://github.com/..."
+                  {...f('cv_url')}
+                  placeholder="/CV.pdf or https://..."
+                  flex={1}
                 />
-              </FormControl>
-              <FormControl>
-                <FormLabel>LinkedIn URL</FormLabel>
-                <Input
-                  {...f('linkedin_url')}
-                  placeholder="https://linkedin.com/in/..."
+                <input
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  ref={cvFileRef}
+                  style={{ display: 'none' }}
+                  onChange={handleCvUpload}
                 />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Instagram URL</FormLabel>
-                <Input
-                  {...f('instagram_url')}
-                  placeholder="https://instagram.com/..."
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>CV / Resume URL</FormLabel>
-                <Input {...f('cv_url')} placeholder="/CV.pdf or https://..." />
-              </FormControl>
-            </SimpleGrid>
+                <Button
+                  leftIcon={
+                    uploadingCv ? <Spinner size="xs" /> : <IoCloudUpload />
+                  }
+                  onClick={() => cvFileRef.current?.click()}
+                  isDisabled={uploadingCv}
+                  size="sm"
+                  flexShrink={0}
+                >
+                  {uploadingCv ? 'Uploading…' : 'Upload'}
+                </Button>
+              </HStack>
+            </FormControl>
+            {/* </SimpleGrid> */}
 
             <FormControl>
               <FormLabel>Profile Image</FormLabel>
@@ -243,7 +287,8 @@ export async function getServerSideProps({ req }) {
   try {
     const { getHomepage } = await import('../../../lib/db')
     const data = await getHomepage()
-    return { props: { initialData: data || null } }
+    const initialData = data ? JSON.parse(JSON.stringify(data)) : null
+    return { props: { initialData } }
   } catch {
     return { props: { initialData: null } }
   }
