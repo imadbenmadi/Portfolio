@@ -282,7 +282,7 @@ export default function AdminProjects({ initialProjects }) {
                 }}
               >
                 <SortableContext items={mainIds} strategy={rectSortingStrategy}>
-                  <SimpleGrid columns={[1, 1, 2]} gap={4}>
+                  <SimpleGrid columns={1} gap={4}>
                     {mainProjects.map(project => (
                       <SortableProjectCard
                         key={project.id}
@@ -330,7 +330,7 @@ export default function AdminProjects({ initialProjects }) {
                 }}
               >
                 <SortableContext items={oldIds} strategy={rectSortingStrategy}>
-                  <SimpleGrid columns={[1, 1, 2]} gap={4}>
+                  <SimpleGrid columns={1} gap={4}>
                     {oldProjects.map(project => (
                       <SortableProjectCard
                         key={project.id}
@@ -356,7 +356,7 @@ export default function AdminProjects({ initialProjects }) {
                   {otherProjects.length} project(s)
                 </Text>
               </HStack>
-              <SimpleGrid columns={[1, 1, 2]} gap={4}>
+              <SimpleGrid columns={1} gap={4}>
                 {otherProjects.map(project => (
                   <SortableProjectCard
                     key={project.id}
@@ -425,7 +425,7 @@ export default function AdminProjects({ initialProjects }) {
                 />
               </FormControl>
 
-              <SimpleGrid columns={2} gap={4} w="full">
+              <SimpleGrid columns={2} gap={4} mt={10} w="full">
                 <FormControl>
                   <FormLabel>Year</FormLabel>
                   <Input
@@ -583,6 +583,11 @@ function SortableProjectCard({
     transition
   }
 
+  const plainDescription = (project.description || '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
   return (
     <Box
       ref={setNodeRef}
@@ -605,7 +610,7 @@ function SortableProjectCard({
             {project.year && <Badge variant="outline">{project.year}</Badge>}
           </HStack>
           <Text fontSize="sm" color="gray.500" noOfLines={2}>
-            {project.description || 'No description'}
+            {plainDescription || 'No description'}
           </Text>
           <Text fontSize="xs" color="gray.400" mt={1}>
             /{project.slug}
