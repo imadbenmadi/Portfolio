@@ -39,7 +39,7 @@ const Projects = ({ mainProjects, oldProjects }) => {
                   title={project.title}
                   thumbnail={project.thumbnail_url || '/images/placeholder.png'}
                 >
-                  {project.description}
+                  {/* {project.description} */}
                 </WorkGridItem>
               </Section>
             ))}

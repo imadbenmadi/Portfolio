@@ -48,6 +48,47 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
+function SortableImageItem({ url, index, onRemove }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: url })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: 'grab'
+  }
+  return (
+    <Box ref={setNodeRef} style={style} position="relative">
+      <Box {...attributes} {...listeners}>
+        <Image
+          src={url}
+          alt={`image ${index + 1}`}
+          h="72px"
+          w="full"
+          objectFit="cover"
+          borderRadius="md"
+        />
+      </Box>
+      <IconButton
+        size="xs"
+        colorScheme="red"
+        aria-label="Remove"
+        icon={<IoTrash />}
+        position="absolute"
+        top="2px"
+        right="2px"
+        onClick={onRemove}
+      />
+    </Box>
+  )
+}
+
 const emptyForm = {
   title: '',
   slug: '',
@@ -57,6 +98,7 @@ const emptyForm = {
   live_url: '',
   github_url: '',
   thumbnail_url: '',
+  images: [],
   category: 'main'
 }
 
@@ -65,6 +107,7 @@ export default function AdminProjects({ initialProjects }) {
   const [form, setForm] = useState(emptyForm)
   const [editId, setEditId] = useState(null)
   const [uploading, setUploading] = useState(false)
+  const [uploadingImages, setUploadingImages] = useState(false)
   const [saving, setSaving] = useState(false)
   const [reordering, setReordering] = useState(false)
   const [deleteId, setDeleteId] = useState(null)
@@ -75,6 +118,7 @@ export default function AdminProjects({ initialProjects }) {
     onClose: onDeleteClose
   } = useDisclosure()
   const fileRef = useRef()
+  const imagesRef = useRef()
   const toast = useToast()
 
   const mainProjects = useMemo(
@@ -114,6 +158,7 @@ export default function AdminProjects({ initialProjects }) {
       live_url: project.live_url || '',
       github_url: project.github_url || '',
       thumbnail_url: project.thumbnail_url || '',
+      images: Array.isArray(project.images) ? project.images : [],
       category: project.category || 'main'
     })
     setEditId(project.id)
@@ -143,6 +188,37 @@ export default function AdminProjects({ initialProjects }) {
       toast({ title: err.message, status: 'error', duration: 4000 })
     } finally {
       setUploading(false)
+    }
+  }
+
+  async function handleImagesUpload(e) {
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
+    setUploadingImages(true)
+    const uploaded = []
+    try {
+      for (const file of files) {
+        const fd = new FormData()
+        fd.append('file', file)
+        const res = await fetch('/api/upload/image', {
+          method: 'POST',
+          body: fd
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error)
+        uploaded.push(data.url)
+      }
+      setForm(f => ({ ...f, images: [...(f.images || []), ...uploaded] }))
+      toast({
+        title: `${uploaded.length} image(s) added!`,
+        status: 'success',
+        duration: 2000
+      })
+    } catch (err) {
+      toast({ title: err.message, status: 'error', duration: 4000 })
+    } finally {
+      setUploadingImages(false)
+      if (imagesRef.current) imagesRef.current.value = ''
     }
   }
 
@@ -483,6 +559,73 @@ export default function AdminProjects({ initialProjects }) {
                   />
                 </FormControl>
               </SimpleGrid>
+
+              <FormControl>
+                <FormLabel>Additional Images (shown on project page)</FormLabel>
+                <VStack align="stretch" spacing={2}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    ref={imagesRef}
+                    style={{ display: 'none' }}
+                    onChange={handleImagesUpload}
+                  />
+                  <Button
+                    leftIcon={
+                      uploadingImages ? (
+                        <Spinner size="xs" />
+                      ) : (
+                        <IoCloudUpload />
+                      )
+                    }
+                    onClick={() => imagesRef.current?.click()}
+                    isDisabled={uploadingImages}
+                    size="sm"
+                    variant="outline"
+                    w="fit-content"
+                  >
+                    {uploadingImages ? 'Uploading…' : 'Upload images'}
+                  </Button>
+                  {Array.isArray(form.images) && form.images.length > 0 && (
+                    <DndContext
+                      collisionDetection={closestCenter}
+                      onDragEnd={({ active, over }) => {
+                        if (!over || active.id === over.id) return
+                        setForm(f => {
+                          const oldIndex = f.images.indexOf(active.id)
+                          const newIndex = f.images.indexOf(over.id)
+                          return {
+                            ...f,
+                            images: arrayMove(f.images, oldIndex, newIndex)
+                          }
+                        })
+                      }}
+                    >
+                      <SortableContext
+                        items={form.images}
+                        strategy={rectSortingStrategy}
+                      >
+                        <SimpleGrid columns={[3, 4]} gap={2} mt={1}>
+                          {form.images.map((url, i) => (
+                            <SortableImageItem
+                              key={url}
+                              url={url}
+                              index={i}
+                              onRemove={() =>
+                                setForm(f => ({
+                                  ...f,
+                                  images: f.images.filter((_, idx) => idx !== i)
+                                }))
+                              }
+                            />
+                          ))}
+                        </SimpleGrid>
+                      </SortableContext>
+                    </DndContext>
+                  )}
+                </VStack>
+              </FormControl>
 
               <FormControl>
                 <FormLabel>Thumbnail Image</FormLabel>

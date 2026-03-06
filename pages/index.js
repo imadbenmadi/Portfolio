@@ -435,7 +435,7 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
         )}
         <SkillsPreview skills={skills} />
 
-        {certificates && certificates.length > 0 && (
+        {/* {certificates && certificates.length > 0 && (
           <Section delay={0.35}>
             <Heading as="h3" variant="section-title" mt={8}>
               Certificates
@@ -556,7 +556,7 @@ const Page = ({ homepage, skills, experiences, education, certificates }) => {
               </Box>
             </Box>
           </Section>
-        )}
+        )} */}
 
         <Section delay={0.4}>
           <Heading as="h3" variant="section-title">
